@@ -1,5 +1,6 @@
-# PM Project 2023: GameCo Case Study
+# LdSS Project
 
-Project simulation for the exam of Project Management.
+Project for the exam of Laboratory of Software Systems.
 
-See documentation at the [repository webpage](https://jahrim.github.io/pm/).
+[#]: TODO
+See documentation at the [repository webpage](https://github.com/ldss-project.github.io/docs).
