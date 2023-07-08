@@ -16,24 +16,16 @@ parent: Servizi
       hasWon: boolean       # if the player has won
     }
     ```
-  - Output:
-    ```yaml
-    result: {
-      code: number          # the operation code (0: success, !0: error)
-      errorMessage?: string # the error message
-    }
-    ```
+  - Output: ` `
+  - Errors:
+    - `400`: malformed input
       
 - `DELETE` **Delete scores by username**: remove the scores of a player.
   - URL: `/score/{username}`
   - Input: ` `
-  - Output:
-    ```yaml
-    result: {
-      code: number          # the operation code (0: success, !0: error)
-      errorMessage?: string # the error message
-    }
-    ```
+  - Output: ` `
+  - Errors:
+    - `404`: username not found
 
 - `GET` **Get score**: get the score of a player.
   - URL: `/score/{username}`
@@ -47,6 +39,8 @@ parent: Servizi
       ratio: number         # the latest ratio between wins and losses (ratio = wins/losses)
     }
     ```
+  - Errors:
+    - `404`: username not found
 
 - `GET` **Get score history**: get the score history of a player.
   - URL: `/score/history/{username}`
@@ -58,9 +52,11 @@ parent: Servizi
       ratio: number          # the ratio between wins and losses (ratio = wins/losses)
     }[]
     ```
+  - Errors:
+    - `404`: username not found
 
 - `GET` **Get leaderboard**: get a leaderboard created from the registered scores.
-  - URL: `/leaderboard/?first?last`
+  - URL: `/leaderboard/?first=1?last=100`
   - Input: ` `
   - Output:
     ```yaml
