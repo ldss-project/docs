@@ -14,3 +14,12 @@ nav_order: 1
 ---
 
 ## Brainstorming
+
+### Frontend Mockup
+
+![Frontend Mockup](/docs/resources/images/frontend-mockup.drawio.png)
+[Download Image](/docs/resources/images/frontend-mockup.drawio.png)
+
+### Servizi
+
+[Service APIs](/docs/services)

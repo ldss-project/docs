@@ -64,6 +64,19 @@ parent: Servizi
     - Errors:
         - `404`: username not found
 
+- `PUT` **Update password**: update the password of a user in the application.
+    - URL: `user/{username}/password`
+    - Input:
+      ```yaml
+      user: {                 
+          username: string
+          password: string
+      }
+      ```
+    - Output:
+    - Errors:
+        - `404`: username not found
+
 - `GET` **Validate token**: validate a token of a user in the application.
     - URL: `token/{tokenId}/validate`
     - Input: ` `
