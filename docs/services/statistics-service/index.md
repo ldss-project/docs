@@ -33,6 +33,7 @@ parent: Servizi
   - Output:
     ```yaml
     score: {
+      date: datetime        # the date when the score was added
       rank: number          # the rank of the player on the leaderboard
       wins: number          # the number of times the player has won
       losses: number        # the number of times the player has lost
@@ -48,8 +49,11 @@ parent: Servizi
   - Output:
     ```yaml
     scores: {
-      date: datetime         # the date when the score was added
-      ratio: number          # the ratio between wins and losses (ratio = wins/losses)
+      date: datetime        # the date when the score was added
+      rank: number          # the rank of the player on the leaderboard
+      wins: number          # the number of times the player has won
+      losses: number        # the number of times the player has lost
+      ratio: number         # the latest ratio between wins and losses (ratio = wins/losses)
     }[]
     ```
   - Errors:
