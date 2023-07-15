@@ -67,6 +67,7 @@ parent: Servizi
     leaderboard: {
       scores: {
         username: string        # the player who owns this score
+        date: datetime          # the date when the score was added
         rank: number            # the rank of the player on the leaderboard
         wins: number            # the number of times the player has won
         losses: number          # the number of times the player has lost
