@@ -34,7 +34,6 @@ parent: Servizi
     - Input:
       ```yaml
       user: {
-        username: string      # the name (and unique identifier) of the user
         password: string      # the password of the user
       }
       ```
@@ -68,8 +67,7 @@ parent: Servizi
     - URL: `user/{username}/password`
     - Input:
       ```yaml
-      user: {                 
-          username: string
+      user: { 
           password: string
       }
       ```
