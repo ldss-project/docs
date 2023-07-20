@@ -60,7 +60,7 @@ parent: Servizi
     - `404`: username not found
 
 - `GET` **Get leaderboard**: get a leaderboard created from the registered scores.
-  - URL: `/leaderboard/?first=1?last=100`
+  - URL: `/leaderboard/?first=1&last=100` (first included, last excluded)
   - Input: ` `
   - Output:
     ```yaml
