@@ -71,7 +71,7 @@ parent: Servizi
           password: string
       }
       ```
-    - Output:
+    - Output: ` `
     - Errors:
         - `404`: username not found
 
@@ -91,10 +91,5 @@ parent: Servizi
     - URL: `token/{tokenId}/revoke`
     - Input: ` `
     - Output: ` `
-      ```yaml
-      user: {
-        username: string        # the name (and unique identifier) of the user
-      }
-      ```
     - Errors:
         - `403`: expired token
