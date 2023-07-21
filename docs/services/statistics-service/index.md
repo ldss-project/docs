@@ -33,11 +33,11 @@ parent: Servizi
   - Output:
     ```yaml
     score: {
-      date: datetime        # the date when the score was added
-      rank: number          # the rank of the player on the leaderboard
-      wins: number          # the number of times the player has won
-      losses: number        # the number of times the player has lost
-      ratio: number         # the latest ratio between wins and losses (ratio = wins/losses)
+      insertion: datetime           # the date when the score was added        
+      rank: number                  # the rank of the player on the leaderboard
+      wins: number                  # the number of times the player has won
+      losses: number                # the number of times the player has lost
+      ratio: number                 # the latest ratio between wins and losses (ratio = wins/losses)
     }
     ```
   - Errors:
@@ -49,11 +49,11 @@ parent: Servizi
   - Output:
     ```yaml
     scores: {
-      date: datetime        # the date when the score was added
-      rank: number          # the rank of the player on the leaderboard
-      wins: number          # the number of times the player has won
-      losses: number        # the number of times the player has lost
-      ratio: number         # the latest ratio between wins and losses (ratio = wins/losses)
+      insertion: datetime           # the date when the score was added
+      rank: number                  # the rank of the player on the leaderboard
+      wins: number                  # the number of times the player has won
+      losses: number                # the number of times the player has lost
+      ratio: number                 # the latest ratio between wins and losses (ratio = wins/losses)
     }[]
     ```
   - Errors:
@@ -66,12 +66,14 @@ parent: Servizi
     ```yaml
     leaderboard: {
       scores: {
-        username: string        # the player who owns this score
-        date: datetime          # the date when the score was added
-        rank: number            # the rank of the player on the leaderboard
-        wins: number            # the number of times the player has won
-        losses: number          # the number of times the player has lost
-        ratio: number           # the ratio between wins and losses (ratio = wins/losses)
+        username: string              # the player who owns this score
+        insertion: datetime           # the date when the score was added
+        rank: number                  # the rank of the player on the leaderboard
+        wins: number                  # the number of times the player has won
+        losses: number                # the number of times the player has lost
+        ratio: number                 # the ratio between wins and losses (ratio = wins/losses)
       }[]
     }
     ```
+  - Errors:
+    - `400`: malformed input
