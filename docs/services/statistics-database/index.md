@@ -11,7 +11,7 @@ parent: Servizi
 ```yaml
 scores: {
   username: string                # the player who owns this score
-  last_scores: {                  # the last scores (e.g. in the last year) of the player
+  latest_scores: {                # the last scores (e.g. in the last year) of the player
     insertion: datetime           # the date when the score was added
     rank: number                  # the rank of the player on the leaderboard
     wins: number                  # the number of times the player has won
