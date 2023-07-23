@@ -29,21 +29,33 @@ parent: Servizi
         - `400`: malformed input
         - `400`: gameId already taken
 
-- `GET` **Join public game**: join a public game in the Game Service. Upgrade to websocket connection.
+- `GET` **Join public game**: join a public game in the Game Service.
   - URL: `game`
   - Input: ` `
-  - Output: ` `
+  - Output:
+    ```yaml
+    connection: {
+      websocket: string   # the url the user will have to connect to via websocket to join the game
+    }
+    ```
   - Errors:
+    - `404`: there are no games waiting for new players
 
-- `GET` **Join private game**: join a public game in the Game Service. Upgrade to websocket connection.
+- `GET` **Join private game**: join a public game in the Game Service.
   - URL: `game/{gameId}`
   - Input: ` `
-  - Output: ` `
+  - Output:
+    ```yaml
+    connection: {
+      websocket: string   # the url the user will have to connect to via websocket to join the game
+    }
+    ```
   - Errors:
     - `403`: game already started
     - `404`: game not found
 
 - `WEBSOCKET` **Play game**: play within a game in the Game Service.
+  - URL: `game/{gameId}` (ws://)
   - Input flow:
     ```yaml
     input: {
