@@ -12,15 +12,13 @@ parent: Servizi
     - URL: `game`
     - Input:
       ```yaml
-      game: {
-        configuration: {
-          time-contraint?: {                        # if not present, then the time constraint is "No Limit"
-            type: move-limit | player-limit         # if present, the time constraint can be "Move Limit" or "Player Limit"
+      gameConfiguration: {
+          timeContraint?: {                        # if not present, then the time constraint is "No Limit"
+            type: MoveLimit | PlayerLimit          # if present, the time constraint can be "Move Limit" or "Player Limit"
             time: Time
           }
-          private?: {                               # if not present, then the game is public
-            gameId: string                          # the private game identifier
-          } 
+          isPrivate: boolean                       # if true the game is private, otherwise it's public
+          gameId?: string                          # the private game identifier
         }
       }
       ```
@@ -59,15 +57,15 @@ parent: Servizi
   - Input flow:
     ```yaml
     input: {
-      find-moves?: {
+      findMoves?: {
         position: Position
       }
-      apply-move?: {
+      applyMove?: {
         move: Move
       }
       promote?: {
         pawn: Piece
-        to: knight, bishop, rook, queen
+        to: Knight, Bishop, Rook, Queen
       }
     }  
     ```
@@ -75,11 +73,11 @@ parent: Servizi
     ```yaml 
     game: {                                                    # the game the player is connected to
       server: {                                                # the server hosting the game
-        state: waiting-for-players | running | terminated      # the state of the server
+        state: WaitingForPlayers | Running | Terminated        # the state of the server
       }
       state: {                                                 # the state of the game
-        turn: white | black                                    # the player in control of the chessboard
-        situation?: check | stale | checkmate | promotion      # the situation on the chessboard, if any
+        turn: White | Black                                    # the player in control of the chessboard
+        situation?: Check | Stale | Checkmate | Promotion      # the situation on the chessboard, if any
       }
       white: {                                                 # the information concerning the white player
         player: Player                                         # the white player
@@ -101,12 +99,12 @@ parent: Servizi
 ```yaml
 Time: {                                                  # A duration
   value: number                                          # the number of time units
-  unit: seconds | minutes | hours                        # the time unit for the time configuration
+  unit: scala.TimeUnit                                   # the time unit for the time configuration
 }
 
 Position: {                                              # A position in the chessboard
-  file: a | b | c | d | e | f | g | h                    # the column in the chessboard
-  rank: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8                    # the row in the chessboard
+  file: A | B | C | D | E | F | G | H                    # the column in the chessboard
+  rank: _1 | _2 | _3 | _4 | _5 | _6 | _7 | _8            # the row in the chessboard
 }
 
 Player: {                                                # A player in the game
@@ -119,12 +117,12 @@ ChessboardStatus: {                                      # The state of the ches
 }
 
 Piece: {                                                 # A piece on the chessboard
-  type: pawn | knight | bishop | rook | queen | king     # the type of piece
+  type: Pawn | Knight | Bishop | Rook | Queen | King     # the type of piece
   position: Position                                     # the position of the piece on the chessboard
 }
 
 Move: {                                                  # A move in the game
-  type: move | capture                                   # the type of move
+  type: Move | Capture                                   # the type of move
   from: Position                                         # the starting position of the move
   to: Position                                           # the arriving position of the move
   
@@ -134,8 +132,8 @@ Move: {                                                  # A move in the game
       to: Position                                       # the arriving position of the rook
     }
   }
-  en-passant?: {                                         # If present, the move is an en-passant
-    opponent-pawn: Piece                                  # the opponent pawn captured by the en-passant
+  enPassant?: {                                          # If present, the move is an en-passant
+    opponentPawn: Piece                                  # the opponent pawn captured by the en-passant
   }
 }
 ```
