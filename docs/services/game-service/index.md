@@ -13,13 +13,12 @@ parent: Servizi
     - Input:
       ```yaml
       gameConfiguration: {
-          timeContraint?: {                        # if not present, then the time constraint is "No Limit"
-            type: MoveLimit | PlayerLimit          # if present, the time constraint can be "Move Limit" or "Player Limit"
-            time: Time
-          }
-          isPrivate: boolean                       # if true the game is private, otherwise it's public
-          gameId?: string                          # the private game identifier
+        timeContraint?: {                        # if not present, then the time constraint is "No Limit"
+          type: MoveLimit | PlayerLimit          # if present, the time constraint can be "Move Limit" or "Player Limit"
+          time: Time
         }
+        isPrivate: boolean                       # if true the game is private, otherwise it's public
+        gameId?: string                          # the private game identifier
       }
       ```
     - Output: ` `
@@ -27,7 +26,7 @@ parent: Servizi
         - `400`: malformed input
         - `400`: gameId already taken
 
-- `GET` **Join public game**: join a public game in the Game Service.
+- `GET` **Find public game**: find a random available public game in the Game Service.
   - URL: `game`
   - Input: ` `
   - Output:
@@ -39,7 +38,7 @@ parent: Servizi
   - Errors:
     - `404`: there are no games waiting for new players
 
-- `GET` **Join private game**: join a public game in the Game Service.
+- `GET` **Find private game**: find a game with the specified id in the Game Service.
   - URL: `game/{gameId}`
   - Input: ` `
   - Output:
@@ -52,7 +51,7 @@ parent: Servizi
     - `403`: game already started
     - `404`: game not found
 
-- `WEBSOCKET` **Play game**: play within a game in the Game Service.
+- `WEBSOCKET` **Join and play game**: join and play within a game in the Game Service.
   - URL: `game/{gameId}` (ws://)
   - Input flow:
     ```yaml
