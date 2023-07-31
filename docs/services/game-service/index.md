@@ -73,22 +73,33 @@ parent: Servizi
     game: {                                                    # the game the player is connected to
       server: {                                                # the server hosting the game
         state: WaitingForPlayers | Running | Terminated        # the state of the server
+        error?: {                                              # the latest error occurred in the server, if any
+          type: Generic | PlayerDisconnected,                  # the type of error
+          message: string                                      # the description of the error
+        } 
       }
       state: {                                                 # the state of the game
         turn: White | Black                                    # the player in control of the chessboard
-        situation?: Check | Stale | Checkmate | Promotion      # the situation on the chessboard, if any
-      }
-      white: {                                                 # the information concerning the white player
-        player: Player                                         # the white player
-        chessboard: ChessboardStatus                           # the state of the chessboard for the white player
-        history: Move[]                                        # the history of white moves
-        time: Time                                             # the time remaining for the white player  
-      }
-      black: {                                                 # the information concerning the black player
-        player: Player                                         # the black player
-        chessboard: ChessboardStatus                           # the state of the chessboard for the black player
-        history: Move[]                                        # the history of black moves
-        time: Time                                             # the time remaining for the black player  
+        situation?: {                                          # the situation on the chessboard, if any
+          type: Check | Stale | Checkmate | Promotion          # the type of situation
+          promotingPawnPosition?: Position                     # the position of the pawn to promote (only Promotion)
+        },
+        white: {                                               # the information concerning the white player
+          player: Player                                       # the white player
+          chessboard: ChessboardStatus                         # the state of the chessboard for the white player
+          history: Move[]                                      # the history of white moves
+          time: Time                                           # the time remaining for the white player  
+        },
+        black: {                                               # the information concerning the black player
+          player: Player                                       # the black player
+          chessboard: ChessboardStatus                         # the state of the chessboard for the black player
+          history: Move[]                                      # the history of black moves
+          time: Time                                           # the time remaining for the black player  
+        },
+        gameOver?: {                                           # if present, the match is over
+          cause: Timeout | Checkmate | Stalemate               # the cause of the match termination
+          winner?: White | Black                               # the team of the winner of the match
+        } 
       }
     }
     ```
