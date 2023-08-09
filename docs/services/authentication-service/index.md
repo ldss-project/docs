@@ -8,7 +8,7 @@ parent: Servizi
 # Authentication Service
 {: .no_toc}
 
-- `POST` **Register user**: register a new user to the application.
+- `POST` **Register user**: register a new user to the application. Creates a session.
   - URL: `user/{username}/sign-in`
   - Input:
     ```yaml
@@ -19,17 +19,19 @@ parent: Servizi
     ```
   - Output:
     ```yaml
-    user: {                 
+    session: {     
+      username: string      # the user owning the session
       token: {              # the token of the just-created active session of the user
         id: string          # the token identifier
+        expiration: date    # the date of expiration of the token
       }
     }
     ```
   - Errors:
-    - `400`: malformed input
-    - `400`: username already taken
+    - `400`: MalformedInputException
+    - `400`: UsernameAlreadyTakenException
 
-- `POST` **Log in user**: authenticate a user in the application.
+- `POST` **Log in user**: authenticate a user in the application. Creates a session.
     - URL: `user/{username}/log-in`
     - Input:
       ```yaml
@@ -39,18 +41,20 @@ parent: Servizi
       ```
     - Output:
       ```yaml
-      user: {                 
+      session: {     
+        username: string      # the user owning the session
         token: {              # the token of the just-created active session of the user
           id: string          # the token identifier
+          expiration: date    # the date of expiration of the token
         }
       }
       ```
     - Errors:
-      - `400`: malformed input
-      - `400`: incorrect password
-      - `404`: username not found
+      - `400`: MalformedInputException
+      - `400`: IncorrectPasswordException
+      - `404`: UserNotFoundException
 
-- `GET` **Get user information**: get the profile information of a user in the application.
+- `GET` **Get user information**: get the profile information of a user in the application. Requires a session.
     - URL: `user/{username}/profile`
     - Input: ` `
     - Output:
@@ -61,9 +65,10 @@ parent: Servizi
       }
       ```
     - Errors:
-        - `404`: username not found
+      - `403`: UserNotAuthorizedException
+      - `404`: UserNotFoundException
 
-- `PUT` **Update password**: update the password of a user in the application.
+- `PUT` **Update password**: update the password of a user in the application. Requires a session.
     - URL: `user/{username}/password`
     - Input:
       ```yaml
@@ -73,23 +78,11 @@ parent: Servizi
       ```
     - Output: ` `
     - Errors:
-        - `404`: username not found
+      - `403`: UserNotAuthorizedException
+      - `404`: UserNotFoundException
 
-- `GET` **Validate token**: validate a token of a user in the application.
-    - URL: `token/{tokenId}/validate`
-    - Input: ` `
-    - Output:
-      ```yaml
-      user: {
-        username: string        # the name (and unique identifier) of the user
-      }
-      ```
-    - Errors:
-        - `403`: expired token
-
-- `DELETE` **Revoke token**: revoke a token of a user in the application.
-    - URL: `token/{tokenId}/revoke`
+- `POST` **Log out user**: revoke the authentication of a user in the application. Delete the current session.
+    - URL: `user/:username/log-out`
     - Input: ` `
     - Output: ` `
-    - Errors:
-        - `403`: expired token
+    - Errors: ` `
