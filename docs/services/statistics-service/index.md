@@ -13,7 +13,7 @@ parent: Servizi
   - Input:
     ```yaml
     score: {
-      hasWon: boolean       # if the player has won
+      hasWon?: boolean       # true if the player has won, false if the player has lost, none if the match was a par
     }
     ```
   - Output: ` `
