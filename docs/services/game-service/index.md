@@ -12,138 +12,329 @@ parent: Servizi
     - URL: `game`
     - Input:
       ```yaml
-      gameConfiguration: {
-        timeContraint?: {                        # if not present, then the time constraint is "No Limit"
-          type: MoveLimit | PlayerLimit          # if present, the time constraint can be "Move Limit" or "Player Limit"
-          time: Time
-        }
-        isPrivate: boolean                       # if true the game is private, otherwise it's public
-        gameId?: string                          # the private game identifier
-      }
+      gameConfiguration: GameConfiguration
       ```
-    - Output: ` `
+    - Output:
+      ```yaml
+      connection:
+        websocket: string   # the url the user will have to connect to via websocket to join the game (without the host)
+      ```
     - Errors:
-        - `400`: malformed input
-        - `400`: gameId already taken
+        - `400`: MalformedInputException
+        - `403`: GameIdAlreadyTakenException
 
 - `GET` **Find public game**: find a random available public game in the Game Service.
   - URL: `game`
   - Input: ` `
   - Output:
     ```yaml
-    connection: {
-      websocket: string   # the url the user will have to connect to via websocket to join the game
-    }
+    connection:
+      websocket: string   # the url the user will have to connect to via websocket to join the game (without the host)
     ```
   - Errors:
-    - `404`: there are no games waiting for new players
+    - `404`: NoAvailableGamesException
 
 - `GET` **Find private game**: find a game with the specified id in the Game Service.
   - URL: `game/{gameId}`
   - Input: ` `
   - Output:
     ```yaml
-    connection: {
-      websocket: string   # the url the user will have to connect to via websocket to join the game
-    }
+    connection:
+      websocket: string   # the url the user will have to connect to via websocket to join the game (without the host)
     ```
   - Errors:
-    - `403`: game already started
-    - `404`: game not found
+    - `403`: GameAlreadyStartedException
+    - `404`: GameNotFoundException
 
 - `WEBSOCKET` **Join and play game**: join and play within a game in the Game Service.
-  - URL: `game/{gameId}` (ws://)
-  - Input flow:
-    ```yaml
-    input: {
-      findMoves?: {
-        position: Position
-      }
-      applyMove?: {
-        move: Move
-      }
-      promote?: {
-        pawn: Piece
-        to: Knight, Bishop, Rook, Queen
-      }
-    }  
-    ```
-  - Output flow:
-    ```yaml 
-    game: {                                                    # the game the player is connected to
-      server: {                                                # the server hosting the game
-        state: WaitingForPlayers | Running | Terminated        # the state of the server
-        error?: {                                              # the latest error occurred in the server, if any
-          type: Generic | PlayerDisconnected,                  # the type of error
-          message: string                                      # the description of the error
-        } 
-      }
-      state: {                                                 # the state of the game
-        turn: White | Black                                    # the player in control of the chessboard
-        situation?: {                                          # the situation on the chessboard, if any
-          type: Check | Stale | Checkmate | Promotion          # the type of situation
-          promotingPawnPosition?: Position                     # the position of the pawn to promote (only Promotion)
-        },
-        white: {                                               # the information concerning the white player
-          player: Player                                       # the white player
-          chessboard: ChessboardStatus                         # the state of the chessboard for the white player
-          history: Move[]                                      # the history of white moves
-          time: Time                                           # the time remaining for the white player  
-        },
-        black: {                                               # the information concerning the black player
-          player: Player                                       # the black player
-          chessboard: ChessboardStatus                         # the state of the chessboard for the black player
-          history: Move[]                                      # the history of black moves
-          time: Time                                           # the time remaining for the black player  
-        },
-        gameOver?: {                                           # if present, the match is over
-          cause: Timeout | Checkmate | Stalemate               # the cause of the match termination
-          winner?: White | Black                               # the team of the winner of the match
-        } 
-      }
-    }
-    ```
-  
+  - URL: `game/{gameId}`
+  - Request-Response:
+    - GetState:
+      - Input: 
+        ```yaml
+        methodCall:
+          method: "GetState"
+        ```
+      - Output:
+        ```yaml
+        methodCall:
+          method: "GetState"
+          output: 
+            serverState: ServerState
+        ```
+    - JoinGame:
+      - Input:
+        ```yaml
+        methodCall:
+          method: "JoinGame"
+          input:
+            player: Player
+        ```
+      - Output: ` `
+    - FindMoves:
+      - Input:
+        ```yaml
+        methodCall:
+          method: "FindMoves"
+          input:
+            position: Position
+        ```
+      - Output:
+        ```yaml
+          methodCall:
+            method: "FindMoves"
+            output:
+              moves: Move[]
+        ``` 
+    - ApplyMove:
+      - Input:
+        ```yaml
+        methodCall:
+          method: "ApplyMove"
+          input:
+            move: Move
+        ```
+      - Output: ` `
+    - Promote:
+      - Input:
+        ```yaml
+        methodCall:
+          method: "Promote"
+          input:
+            promotionChoice: PromotionChoice
+        ```
+      - Output: ` `
+  - Events:
+    - ChessGameServiceEvent:
+      - LoggingEvent:
+        ```yaml
+        type: "LoggingEvent"
+        payload: string
+        ```
+      - ServerStateUpdateEvent:
+        - GameStateUpdateEvent:
+          - ChessboardUpdateEvent:
+          ```yaml
+          type: "ChessboardUpdateEvent"
+          payload: Chessboard
+          ```
+          - GameOverUpdateEvent:
+          ```yaml
+          type: "GameOverUpdateEvent"
+          payload: GameOver
+          ```
+          - GameSituationUpdateEvent:
+          ```yaml
+          type: "GameSituationUpdateEvent"
+          payload: GameSituation
+          ```
+          - MoveHistoryUpdateEvent:
+          ```yaml
+          type: "MoveHistoryUpdateEvent"
+          payload: MoveHistory
+          ```
+          - PlayerUpdateEvent:
+            - WhitePlayerUpdateEvent:
+            ```yaml
+            type: "WhitePlayerUpdateEvent"
+            payload: Player
+            ```
+            - BlackPlayerUpdateEvent:
+            ```yaml
+            type: "BlackPlayerUpdateEvent"
+            payload: Player
+            ```
+          - TimerUpdateEvent:
+            - WhiteTimerUpdateEvent:
+            ```yaml
+            type: "WhiteTimerUpdateEvent"
+            payload: Duration
+            ```
+            - BlackTimerUpdateEvent:
+            ```yaml
+            type: "BlackTimerUpdateEvent"
+            payload: Duration
+            ```
+          - TurnUpdateEvent:
+          ```yaml
+          type: "TurnUpdateEvent"
+          payload: Team
+          ```
+        - ServerErrorUpdateEvent:
+        ```yaml
+        type: "ServerErrorUpdateEvent"
+        payload: ChessGameServiceException
+        ```
+        - ServerSituationUpdateEvent:
+        ```yaml
+        type: "ServerSituationUpdateEvent"
+        payload: ServerSituation
+        ```
+        - SubscriptionUpdateEvent:
+        ```yaml
+        type: "SubscriptionUpdateEvent"
+        payload: string[]
+        ```
 ## Schemas
 
+### ServerState
 ```yaml
-Time: {                                                  # A duration
-  value: number                                          # the number of time units
-  unit: scala.TimeUnit                                   # the time unit for the time configuration
-}
+situation: ServerSituation
+subscriptions: string[]
+error?: ChessGameServiceException
+gameState: GameState
+```
 
-Position: {                                              # A position in the chessboard
-  file: A | B | C | D | E | F | G | H                    # the column in the chessboard
-  rank: _1 | _2 | _3 | _4 | _5 | _6 | _7 | _8            # the row in the chessboard
-}
+### ServerSituation
+```scala
+"NotConfigured" | "WaitingForPlayers" | "Ready" | "Running" | "Terminated"
+```
 
-Player: {                                                # A player in the game
-  username: string                                       # the name of the player        
-}
+### ChessGameServiceException
+```yaml
+type: string       # any class name of E <: ChessGameServiceException
+message: string
+```
 
-ChessboardStatus: {                                      # The state of the chessboard wrt a player
-  pieces: Piece[]                                        # the pieces of the player
-  moves: Move[]                                          # the moves of the player
-}
+### GameState
+```yaml
+chessboard: Chessboard
+moveHistory: MoveHistory
+currentTurn: Team
+configuration: GameConfiguration
+situation: GameSituation
+gameOver?: GameOver
+timers: TimerMap
+```
 
-Piece: {                                                 # A piece on the chessboard
-  type: Pawn | Knight | Bishop | Rook | Queen | King     # the type of piece
-  position: Position                                     # the position of the piece on the chessboard
-}
+### Chessboard
+```yaml
+pieces: {
+  piece: Piece
+  position: Position
+}[]
+```
 
-Move: {                                                  # A move in the game
-  type: Move | Capture                                   # the type of move
-  from: Position                                         # the starting position of the move
-  to: Position                                           # the arriving position of the move
-  
-  castling?: {                                           # If present, the move is a castling
-    rook: {                                              # the rook involved in the castling
-      from: Position                                     # the starting position of the rook
-      to: Position                                       # the arriving position of the rook
-    }
-  }
-  enPassant?: {                                          # If present, the move is an en-passant
-    opponentPawn: Piece                                  # the opponent pawn captured by the en-passant
-  }
-}
+### Piece
+```yaml
+type: PieceType
+team: Team
+```
+### PieceType
+```scala
+"Pawn" | "Knight" | "Bishop" | "Rook" | "Queen" | "King"
+```
+
+### Team
+```scala
+"WHITE" | "BLACK"
+```
+
+### Position
+```yaml
+file: File
+rank: Rank
+```
+
+### File
+```scala
+"A" | "B" | "C" | "D" | "E" | "F" | "G" | "H"
+```
+
+### Rank
+```scala
+"1" | "2" | "3" | "4" | "5" | "6" | "7" | "8"
+```
+
+### MoveHistory
+```yaml
+entries: {
+  piece: Piece
+  move: Move
+}[]
+```
+
+### Move
+```yaml
+from: Position
+to: Position
+capturedPiece?: Piece
+castling?:
+  rookFrom: Position
+  rookTo: Position
+doubleMove?:
+  passingBy: Position
+enPassant?:
+  capturedPawnPosition: Position
+```
+
+### GameConfiguration
+```yaml
+timeContraint?: TimeConstraint          # Default: "NoLimit"
+whitePlayer?: Player                    # Default: NoWhitePlayer
+blackPlayer?: Player                    # Default: NoBlackPlayer
+gameMode?: GameMode                     # Default: "PVP"
+isPrivate?: boolean                     # Default: false
+gameId?: string                         # Default: random
+```
+
+### TimeConstraint
+```yaml
+type: TimeConstraintType
+time?: Duration                         # absent for "NoLimit"
+```
+
+### TimeConstraintType
+```scala
+"NoLimit" | "MoveLimit" | "PlayerLimit"
+```
+
+### Duration
+```yaml
+value: { $numberLong: string }
+unit: string                            # any java.util.concurrent.TimeUnit as string
+```
+
+### Player
+```yaml
+team: Team
+name?: string                           # Default: "_" (meaning guest)
+```
+
+### GameMode
+```scala
+"PVP" | "PVE"
+```
+
+### GameSituation
+```yaml
+type: GameSituationType
+promotingPawnPosition?: Position        # only if 'type' is 'Promotion'
+```
+
+### GameSituationType
+```scala
+"None" | "Check" | "Stale" | "Checkmate" | "Promotion"
+```
+
+### GameOver
+```yaml
+cause: GameOverCause
+winner?: Player
+```
+
+### GameOverCause
+```scala
+"Checkmate" | "Stalemate" | "Surrender" | "Timeout"
+```
+
+### TimerMap
+```yaml
+white?: Duration
+black?: Duration
+```
+
+### PromotionChoice
+```scala
+"Pawn" | "Knight" | "Bishop" | "Rook"
 ```
