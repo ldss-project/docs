@@ -13,13 +13,22 @@ nav_order: 1
 
 ---
 
-## Brainstorming
+## Documentazione
 
-### Frontend Mockup
+Questa è la documentazione relativa al progetto per il corso di
+[Laboratorio di Sistemi Software 2022-2023](https://www.unibo.it/it/didattica/insegnamenti/insegnamento/2022/412677).
 
-![Frontend Mockup](/docs/resources/images/frontend-mockup.drawio.png)
-[Download Image](/docs/resources/images/frontend-mockup.drawio.png)
+Per la documentazione specifica degli servizi e degli artefatti realizzati,
+si rimanda ai corrispondenti repository:
+- [Frontend Service](https://github.com/ldss-project/frontend)
+- [Authentication Service](https://github.com/ldss-project/authentication-service)
+- [Statistics Service](https://github.com/ldss-project/statistics-service)
+- [Chess Game Service](https://github.com/ldss-project/chess-game-service)
+- [HexArc](https://github.com/ldss-project/hexarc)
+- [WartRemover Gradle Plugin](https://github.com/ldss-project/wartremover-gradle-plugin)
+- [Scala3 Project Template Repository](https://github.com/ldss-project/scala3-project-template)
 
-### Servizi
+---
 
-[Service APIs](/docs/services)
+[Back to Top](#top) |
+[Next Chapter](/docs/0-problem)

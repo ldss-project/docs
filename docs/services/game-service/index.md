@@ -70,7 +70,11 @@ parent: Servizi
           input:
             player: Player
         ```
-      - Output: ` `
+      - Output:
+        ```yaml
+        methodCall:
+          method: "JoinGame"
+        ```
     - FindMoves:
       - Input:
         ```yaml
@@ -94,7 +98,11 @@ parent: Servizi
           input:
             move: Move
         ```
-      - Output: ` `
+      - Output:
+         ```yaml
+        methodCall:
+          method: "ApplyMove"
+        ```
     - Promote:
       - Input:
         ```yaml
@@ -103,7 +111,11 @@ parent: Servizi
           input:
             promotionChoice: PromotionChoice
         ```
-      - Output: ` `
+      - Output:
+        ```yaml
+        methodCall:
+          method: "Promote"
+        ```
   - Events:
     - ChessGameServiceEvent:
       - LoggingEvent:
