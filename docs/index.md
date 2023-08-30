@@ -24,7 +24,7 @@ si rimanda ai corrispondenti repository:
 - [Authentication Service](https://github.com/ldss-project/authentication-service)
 - [Statistics Service](https://github.com/ldss-project/statistics-service)
 - [Chess Game Service](https://github.com/ldss-project/chess-game-service)
-- [HexArc](https://github.com/ldss-project/hexarc)
+- [HexArc - Hexagonal Architecture Framework](https://github.com/ldss-project/hexarc)
 - [WartRemover Gradle Plugin](https://github.com/ldss-project/wartremover-gradle-plugin)
 - [Scala3 Project Template Repository](https://github.com/ldss-project/scala3-project-template)
 
