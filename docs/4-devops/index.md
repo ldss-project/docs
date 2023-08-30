@@ -7,6 +7,12 @@ nav_order: 6
 # DevOps
 {: .no_toc}
 
+## Contenuti
+{: .no_toc}
+
+- TOC
+{:toc}
+
 ---
 
 ## Versioning and Licensing
@@ -24,4 +30,4 @@ nav_order: 6
 ---
 
 [Back to Top](#top) |
-[Previous Chapter](/docs/3-design)
+[Previous Chapter](/docs/3-tactical-design)

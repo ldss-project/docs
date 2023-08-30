@@ -10,6 +10,12 @@ nav_order: 2
 Di seguito, si riporta la proposta di progetto pubblicata sul forum progetti,
 usata come base per definire il problema da risolvere.
 
+## Contenuti
+{: .no_toc}
+
+- TOC
+{:toc}
+
 ---
 
 ## Scenario
@@ -28,7 +34,8 @@ di gestire più partite tra diversi giocatori online.
 
 ## Requisiti di massima
 - Creare una partita di scacchi, pubblica o privata;
-- Partecipare a una partita di scacchi casuale, se pubblica, o conoscendone l'identificatore, se privata;
+- Partecipare a una partita di scacchi casuale, se pubblica, o conoscendone l'identificatore,
+  se privata;
 - Registrarsi all'applicazione;
 - Fare login all'interno dell'applicazione;
 - Accedere all'applicazione come ospite (senza richiedere un account);

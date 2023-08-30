@@ -1,15 +1,19 @@
 ---
-title: Analisi dei requisiti
+title: Strategic Design
 layout: default
 nav_order: 4
 ---
 
-# Analisi dei requisiti
+# Strategic Design
 {: .no_toc}
 
----
+## Contenuti
+{: .no_toc}
 
-## Casi d'uso
+- TOC
+{:toc}
+
+---
 
 ## Bounded context
 
@@ -19,4 +23,4 @@ nav_order: 4
 
 [Back to Top](#top) |
 [Previous Chapter](/docs/1-domain-analysis) |
-[Next Chapter](/docs/3-design)
+[Next Chapter](/docs/3-tactical-design)

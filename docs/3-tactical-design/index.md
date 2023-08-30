@@ -1,11 +1,17 @@
 ---
-title: Design
+title: Tactical Design
 layout: default
 nav_order: 5
 ---
 
-# Design
+# Tactical Design
 {: .no_toc}
+
+## Contenuti
+{: .no_toc}
+
+- TOC
+{:toc}
 
 ---
 
@@ -18,5 +24,5 @@ nav_order: 5
 ---
 
 [Back to Top](#top) |
-[Previous Chapter](/docs/2-requirements-analysis) |
+[Previous Chapter](/docs/2-strategic-design) |
 [Next Chapter](/docs/4-devops)
