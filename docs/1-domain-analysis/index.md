@@ -47,9 +47,9 @@ considerare possibili fallimenti nei processi descritti.
 
 ### Creazione di una partita
 
-Il processo di creazione di una `partita` prevede che un `giocatore` definisca la
+Il processo di `creazione di una partita` prevede che un `giocatore` definisca la
 sua `configurazione` e la inoltri a un `sistema di gestione delle partite`. In questo
-contesto, il giocatore assume il ruolo di `host` della partita.
+contesto, il giocatore assume il ruolo di `host` della `partita`.
 
 La configurazione di una partita può specificare alcuni `vincoli temporali` (ad esempio,
 un limite massimo di tempo per mossa), un `identificatore per la partita` e se la
@@ -65,7 +65,7 @@ Infine, l'host partecipa alla partita connettendosi all'URL ricevuto.
 
 ### Partecipazione a una partita pubblica
 
-Il processo di partecipazione a una partita pubblica prevede prima la creazione di una
+Il processo di `partecipazione a una partita pubblica` prevede prima la creazione di una
 partita pubblica da parte di un giocatore host.
 
 Dopodiché, un altro giocatore può richiedere al sistema di gestione della partita
@@ -81,7 +81,7 @@ Infine, il guest partecipa alla partita connettendosi all'URL ricevuto.
 
 ### Partecipazione a una partita privata
 
-Il processo di partecipazione a una partita privata è simile a quello di partecipazione a
+Il processo di `partecipazione a una partita privata` è simile a quello di partecipazione a
 una partita pubblica, ma richiede un'ulteriore interazione tra i due giocatori, in cui l'host
 condivide con il guest l'identificatore della partita privata da lui creata.
 
@@ -92,7 +92,7 @@ delle partite un URL per potersi connettere alla partita dell'host.
 
 ### Ottenimento dello stato di una partita
 
-Il processo di ottenimento dello stato di una partita prevede che un giocatore richieda
+Il processo di `ottenimento dello stato di una partita` prevede che un giocatore richieda
 al sistema di gestione delle partite lo `stato di una partita` specifica dato il suo
 identificatore.
 
@@ -101,14 +101,15 @@ Dopodiché, il sistema reperisce tale stato inoltrandolo al giocatore.
 Nello stato di una partita sono compresi il `turno corrente` dei giocatori, lo stato della
 `scacchiera`, la `situazione sulla scacchiera` (`scacco`, `stallo`, `scacco matto` o `promozione`),
 il tempo rimasto a ciascuno dei giocatori, la configurazione della partita, lo `storico
-delle mosse` eseguite ed eventualmente il `risultato della partita` se è terminata.
+delle mosse` eseguite ed eventualmente il `risultato della partita` nel caso in cui fosse
+terminata.
 
 ![Retrieve game state story](/docs/resources/images/domain-storytelling/get-state.png)
 
 ### Ottenimento delle mosse di un pezzo sulla scacchiera
 
-Il processo di ottenimento delle `mosse` di un `pezzo` sulla scacchiera prevede che un giocatore
-richieda al sistema di gestione delle partite le mosse di un pezzo sulla scacchiera data la sua
+Il processo di `ottenimento delle mosse di un pezzo sulla scacchiera` prevede che un giocatore
+richieda al sistema di gestione delle partite le `mosse` di un `pezzo` sulla scacchiera data la sua
 `posizione`. In particolare, una posizione sulla scacchiera è individuata da un `file` (da A a H),
 indicante la colonna della `cella`, e da un `rank` (da 1 a 8), indicante la riga della cella.
 
@@ -125,7 +126,7 @@ e la `presa al varco`.
 
 ### Applicazione di una mossa a un pezzo sulla scacchiera
 
-Il processo di applicazione di una mossa a un pezzo della scacchiera prevede che un giocatore
+Il processo di `applicazione di una mossa a un pezzo della scacchiera` prevede che un giocatore
 richieda al sistema di gestione delle partite di applicare una mossa a un proprio pezzo sulla
 scacchiera.
 
@@ -139,9 +140,9 @@ giocatore del nuovo stato della partita.
 
 ### Promozione di un pedone
 
-Il processo di promozione di un `pedone` è simile a quello di applicazione di una mossa a
+Il processo di `promozione di un pedone` è simile a quello di applicazione di una mossa a
 un pezzo della scacchiera. In questo caso però, il giocatore richiede al sistema di gestione
-delle partite di promuovere il pedone a un pezzo a propria scelta (tra `cavallo`, `alfiere`, `torre`
+delle partite di promuovere il `pedone` a un pezzo a propria scelta (tra `cavallo`, `alfiere`, `torre`
 e `regina`). Dopodiché, il sistema controlla l'esistenza di un pedone del giocatore in attesa di
 promozione, applicando la promozione e aggiornando lo stato della partita di conseguenza.
 
@@ -149,7 +150,7 @@ promozione, applicando la promozione e aggiornando lo stato della partita di con
 
 ### Salvataggio del risultato di una partita
 
-Il processo di salvataggio del risultato di una partita inizia dal sistema di gestione delle
+Il processo di `salvataggio del risultato di una partita` inizia dal sistema di gestione delle
 partite, dopo che ha analizzato una partita determinandone il termine. Il termine di una
 partita può essere causato da uno scacco matto, uno stallo o un `timeout`.
 
@@ -160,15 +161,15 @@ Tali risultati sono inoltrati al `sistema di gestione delle statistiche dei gioc
 produce i nuovi `punteggi` in `classifica` per i due giocatori coinvolti nella partita, quindi
 salvandoli in un `sistema di memorizzazione delle statistiche dei giocatori`.
 
-Il punteggio di un giocatore può includere il suo nome, il numero di sconfitte e vittorie
-conseguite, il `ratio` (ovvero il quoziente tra le vittorie e le sconfitte), la posizione
-in classifica e la data d'inserimento.
+Il punteggio di un giocatore può includere il suo `nome`, il numero di `sconfitte` e `vittorie`
+conseguite, il `ratio` (ovvero il quoziente tra le vittorie e le sconfitte), la `posizione
+in classifica` e la data d'inserimento.
 
 ![Send game result story](/docs/resources/images/domain-storytelling/send-game-result.png)
 
 ### Registrazione di un nuovo utente
 
-Il processo di registrazione di un nuovo utente al sistema richiede che un `utente non autenticato`
+Il processo di `registrazione di un nuovo utente` al sistema richiede che un `utente non autenticato`
 prepari le informazioni con le quali vuole registrarsi all'applicazione, inviandole al `sistema di
 autenticazione`. In questo contesto, l'utente non autenticato assume il ruolo di `utente guest`
 rispetto al sistema.
@@ -187,19 +188,19 @@ Alla ricezione del proprio token, l'utente guest assume il ruolo di `utente aute
 
 ### Autenticazione di un utente esistente
 
-Il processo di autenticazione di un utente al sistema è simile a quello di registrazione di un
+Il processo di `autenticazione di un utente` al sistema è simile a quello di registrazione di un
 nuovo utente, ma richiede che un utente già registrato prepari le proprie `credenziali` inviandole
 al sistema di autenticazione.
 
-Diversamente dalle informazioni di un utente, le credenziali di un utente contengono solo i dati
+Diversamente dalle informazioni di un utente, le sue credenziali contengono solo i dati
 necessari per essere riconosciuti all'interno del sistema, come nome utente e password.
 
 ![Log-in story](/docs/resources/images/domain-storytelling/log-in.png)
 
 ### Aggiornamento del profilo di un utente
 
-Il processo di aggiornamento del `profilo` di un utente richiede che un utente autenticato invii al
-sistema di autenticazione le informazioni aggiornate del suo profilo (ad esempio una nuova password),
+Il processo di `aggiornamento del profilo di un utente` richiede che un utente autenticato invii al
+sistema di autenticazione le informazioni aggiornate del suo `profilo` (ad esempio una nuova password),
 oltre al token corretto necessario per abilitare tale operazione sensibile sui dati di quell'utente.
 
 Alla ricezione dei dati, il sistema di autenticazione verifica la validità del token rispetto a quello
@@ -212,7 +213,7 @@ Infine, il sistema di autenticazione notifica l'utente del successo dell'operazi
 
 ### Ottenimento della classifica globale dei giocatori
 
-Il processo di ottenimento della classifica globale dei giocatori richiede che un utente invii al
+Il processo di `ottenimento della classifica globale` dei giocatori richiede che un utente invii al
 sistema di gestione delle statistiche dei giocatori gli estremi della porzione della classifica a
 cui è interessato.
 
@@ -223,7 +224,7 @@ statistiche dei giocatori, inoltrandola all'utente.
 
 ### Ottenimento dello storico dei punteggi di un giocatore
 
-Il processo di ottenimento dello storico dei punteggi di un giocatori richiede che un utente invii
+Il processo di `ottenimento dello storico dei punteggi di un giocatore` richiede che un utente invii
 al sistema di gestione delle statistiche dei giocatori il nome dell'utente di cui vuole conoscere
 le `statistiche`.
 
@@ -232,7 +233,16 @@ di memorizzazione delle statistiche dei giocatori, inoltrandolo all'utente.
 
 ![Get score history story](/docs/resources/images/domain-storytelling/get-score-history.png)
 
-## Domains
+## Domain analysis
+
+A partire dalle storie individuate durante il _Domain Storytelling_, è stato possibile estrarre i
+concetti principali del dominio del problema. Analizzando le similarità e le relazioni tra tali
+concetti, è stato quindi possibile suddividere il dominio del problema in diversi sottodomini.
+
+Di seguito, si riporta una proiezione dei concetti del dominio posizionati nello spazio in base alla
+loro similarità.
+
+![Concepts grouping](/docs/resources/images/domain-analysis/subdomains.drawio.png)
 
 ## Ubiquitous Language
 
