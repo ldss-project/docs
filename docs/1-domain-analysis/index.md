@@ -242,7 +242,7 @@ Di seguito, si riporta una proiezione dei concetti del dominio posizionati nello
 loro similarità. Inoltre, in grassetto si riporta la posizione delle storie descritte durante il
 _Domain Storytelling_.
 
-![Concepts grouping](/docs/resources/images/domain-analysis/subdomains.drawio.png)
+![Concepts grouping](/docs/resources/images/domain-analysis/subdomains.png)
 
 Analizzando le similarità e le relazioni tra tali concetti, è stato quindi possibile suddividere il
 dominio del problema in diversi sottodomini. In maggiore dettaglio, sono stati individuati tre
@@ -252,10 +252,10 @@ macro-domini:
   possibili interazioni con essa. In particolare, questi concetti possono essere raggruppati ulteriormente
   in altri sottodomini:
   - **Game Configuration Subdomain**: racchiude tutti i concetti necessari per descrivere la configurazione
-    di una partita di scacchi, permettendo la creazione di un partita, la partecipazione a una partita
-    e la connessione a una partita.
+    di una partita di scacchi, permettendo la creazione, la partecipazione e la connessione a una partita di
+    scacchi.
   - **Chessboard Subdomain**: racchiude tutti i concetti necessari per descrivere la scacchiera in una partita
-    di scacchi, contribuendo al reperimento dello stato di una partita di scacchi.
+    di scacchi, contribuendo al reperimento dello stato di una partita.
   - **Game Situation Subdomain**: racchiude tutti i concetti necessari per descrivere la situazione attuale
     in una partita di scacchi, permettendo la promozione di un pedone e la terminazione di una partita.
   - **Move Subdomain**: racchiude tutti i concetti necessari per descrivere le mosse disponibili per un pezzo
@@ -268,6 +268,11 @@ macro-domini:
   nel sistema, permettendo la registrazione di nuovi utenti, l'autenticazione di utenti già registrati e 
   l'autorizzazione a operazioni sensibili, come l'aggiornamento del profilo di un utente. La gestione della
   memorizzazione di tali dati può essere affidata a un dominio separato, detto **Authentication Storage Subdomain**.
+
+Dopo aver individuato i sottodomini del problema, è stata eseguita un'analisi per classificarli in base alla loro
+complessità e al business value da loro generato. Di seguito, si riporta il _Domain Chart_ risultato da tale analisi.
+
+![Domain Chart](/docs/resources/images/domain-analysis/domain-chart.png)
 
 ## Ubiquitous Language
 
