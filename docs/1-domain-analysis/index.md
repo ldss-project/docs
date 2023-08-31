@@ -269,10 +269,32 @@ macro-domini:
   l'autorizzazione a operazioni sensibili, come l'aggiornamento del profilo di un utente. La gestione della
   memorizzazione di tali dati può essere affidata a un dominio separato, detto **Authentication Storage Subdomain**.
 
+A questi si aggiunge il **Web Application Subdomain**, che gestisce la presentazione del sistema agli utenti finali e
+le interazioni tra tali utenti e gli altri sottodomini del problema.
+
 Dopo aver individuato i sottodomini del problema, è stata eseguita un'analisi per classificarli in base alla loro
 complessità e al business value da loro generato. Di seguito, si riporta il _Domain Chart_ risultato da tale analisi.
 
 ![Domain Chart](/docs/resources/images/domain-analysis/domain-chart.png)
+
+Come si può notare dal _Domain Chart_, i sottodomini sono stati classificati nel modo seguente:
+- **Chess Game Subdomain**: dominio di tipo _Decisive Core_, con elevata complessità, dovuta alla grande quantità
+  di concetti da modellare, e con elevato business value, costituendo infatti le fondamenta del sistema da realizzare.
+- **Statistics Subdomain**: dominio di tipo _Short-Term Core_, con discreta complessità, dovuta alla ridotta quantità
+  di concetti da modellare, e con elevato business value, costituendo infatti un elemento di competitività tra i
+  giocatori e quindi contribuendo al loro coinvolgimento nell'applicazione.
+- **Statistics Storage Subdomain**: dominio di tipo _Supporting_, con bassa complessità, dovuta all'esistenza di
+  soluzioni standard per agevolare la sua implementazione, e con discreto business value, dovuto alla dipendenza dello
+  **Statistics Subdomain** da questo dominio.
+- **Authentication Subdomain**: dominio di tipo _Generic_, con elevata complessità, dovuta alla criticità delle
+  operazioni che gestisce, e con basso business value, costituendo infatti solo un componente necessario al
+  funzionamento del sistema, senza però contribuire alla sua originalità.
+- **Authentication Storage Subdomain**: dominio di tipo _Generic_, con bassa complessità, dovuta all'esistenza di
+  soluzioni standard per agevolare la sua implementazione, e con basso business value, costituendo infatti solo un
+  componente necessario al funzionamento del sistema, senza però contribuire alla sua originalità.
+- **Web Application Subdomain**: dominio di tipo _Decisive Core_, con elevata complessità, dovuta alla gestione delle
+  interazioni con gli altri sottodomini, e con elevato business value, costituendo infatti la facciata del sistema e
+  quindi contribuendo al coinvolgimento degli utenti nell'applicazione.
 
 ## Ubiquitous Language
 
