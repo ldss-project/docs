@@ -186,7 +186,7 @@ Alla ricezione del proprio token, l'utente guest assume il ruolo di `utente aute
 
 ![Sign-in story](/docs/resources/images/domain-storytelling/sign-in.png)
 
-### Autenticazione di un utente esistente
+### Autenticazione di un utente
 
 Il processo di `autenticazione di un utente` al sistema è simile a quello di registrazione di un
 nuovo utente, ma richiede che un utente già registrato prepari le proprie `credenziali` inviandole
@@ -236,13 +236,38 @@ di memorizzazione delle statistiche dei giocatori, inoltrandolo all'utente.
 ## Domain analysis
 
 A partire dalle storie individuate durante il _Domain Storytelling_, è stato possibile estrarre i
-concetti principali del dominio del problema. Analizzando le similarità e le relazioni tra tali
-concetti, è stato quindi possibile suddividere il dominio del problema in diversi sottodomini.
+concetti principali del dominio del problema.
 
 Di seguito, si riporta una proiezione dei concetti del dominio posizionati nello spazio in base alla
-loro similarità.
+loro similarità. Inoltre, in grassetto si riporta la posizione delle storie descritte durante il
+_Domain Storytelling_.
 
 ![Concepts grouping](/docs/resources/images/domain-analysis/subdomains.drawio.png)
+
+Analizzando le similarità e le relazioni tra tali concetti, è stato quindi possibile suddividere il
+dominio del problema in diversi sottodomini. In maggiore dettaglio, sono stati individuati tre
+macro-domini:
+
+- **Chess Game Subdomain**: racchiude tutti i concetti necessari per descrivere una partita di scacchi e le
+  possibili interazioni con essa. In particolare, questi concetti possono essere raggruppati ulteriormente
+  in altri sottodomini:
+  - **Game Configuration Subdomain**: racchiude tutti i concetti necessari per descrivere la configurazione
+    di una partita di scacchi, permettendo la creazione di un partita, la partecipazione a una partita
+    e la connessione a una partita.
+  - **Chessboard Subdomain**: racchiude tutti i concetti necessari per descrivere la scacchiera in una partita
+    di scacchi, contribuendo al reperimento dello stato di una partita di scacchi.
+  - **Game Situation Subdomain**: racchiude tutti i concetti necessari per descrivere la situazione attuale
+    in una partita di scacchi, permettendo la promozione di un pedone e la terminazione di una partita.
+  - **Move Subdomain**: racchiude tutti i concetti necessari per descrivere le mosse disponibili per un pezzo
+    sulla scacchiera, permettendo la ricerca e l'applicazione delle sue mosse.
+- **Statistics Subdomain**: racchiude tutti i concetti necessari per descrivere le statistiche di un giocatore
+  del sistema, permettendo il salvataggio dei punteggi dei giocatori, il reperimento delle statistiche di un
+  giocatore e il reperimento della classifica globale dei giocatori. La gestione della memorizzazione di tali
+  statistiche può essere affidata a un dominio separato, detto **Statistics Storage Subdomain**;
+- **Authentication Subdomain**: racchiude tutti i concetti necessari per descrivere il profilo di un utente
+  nel sistema, permettendo la registrazione di nuovi utenti, l'autenticazione di utenti già registrati e 
+  l'autorizzazione a operazioni sensibili, come l'aggiornamento del profilo di un utente. La gestione della
+  memorizzazione di tali dati può essere affidata a un dominio separato, detto **Authentication Storage Subdomain**.
 
 ## Ubiquitous Language
 
