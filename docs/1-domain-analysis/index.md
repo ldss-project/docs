@@ -59,7 +59,8 @@ Dopo aver ricevuto la configurazione, il sistema crea una partita di conseguenza
 Quindi, genera un `URL` attraverso il quale un qualsiasi giocatore può unirsi alla
 partita, inoltrandolo all'host.
 
-Infine, l'host partecipa alla partita connettendosi all'URL ricevuto.
+Infine, l'host partecipa alla partita connettendosi all'URL ricevuto e inviando al sistema
+la `squadra` a cui vuole essere assegnato.
 
 ![Create game story](/docs/resources/images/domain-storytelling/create-game.png)
 
@@ -75,7 +76,8 @@ giocatore assume il ruolo di `guest` della partita.
 Quindi, il sistema ricerca una partita pubblica tra quelle disponibili e genera un URL
 attraverso il quale un qualsiasi giocatore può unirsi a essa, inoltrandolo al guest.
 
-Infine, il guest partecipa alla partita connettendosi all'URL ricevuto.
+Infine, il guest partecipa alla partita connettendosi all'URL ricevuto e inviando al sistema
+la squadra a cui vuole essere assegnato.
 
 ![Join public game story](/docs/resources/images/domain-storytelling/join-public-game.png)
 
@@ -369,6 +371,7 @@ precedenti, precisando il loro effettivo significato e quindi producendo il segu
 | Scacco matto                                              | Checkmate                     | Situazione sulla scacchiera in cui si verifica sia lo scacco che lo stallo.                                                                                                                                                                                                                                                                                                 | Iponimo di situazione di una partita. |
 | Sistema di gestione delle partite                         | Game Management System        | Sistema che si occupa di gestire la creazione, l'esecuzione e la terminazione delle partite di scacchi.                                                                                                                                                                                                                                                                     |                                       |
 | Situazione di una partita                                 | Game Situation                | Particolare configurazione dei pezzi sulla scacchiera.                                                                                                                                                                                                                                                                                                                      | Meronimo di stato di una partita.     |
+| Squadra                                                   | Team                          | Colore che distingue i pezzi sulla scacchiera ed i loro proprietari.                                                                                                                                                                                                                                                                                                        |                                       |
 | Stallo                                                    | Stale                         | Situazione sulla scacchiera in cui il giocatore di turno non ha mosse disponibili.                                                                                                                                                                                                                                                                                          | Iponimo di situazione di una partita. |
 | Stato del gioco                                           | Game state                    | Insieme dei dati che descrivono univocamente una partita in un certo istante di tempo.                                                                                                                                                                                                                                                                                      |                                       |
 | Storico delle mosse                                       | Move history                  | Sequenza delle mosse eseguite dall'inizio di una partita dai due giocatori partecipanti.                                                                                                                                                                                                                                                                                    | Meronimo di stato di una partita.     |
