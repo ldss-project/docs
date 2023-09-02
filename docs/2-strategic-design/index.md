@@ -7,7 +7,7 @@ nav_order: 4
 # Strategic Design
 {: .no_toc}
 
-In questo capitolo, si approfondiranno i domini individuati durante la _Domain Analysis_
+In questo capitolo si approfondiranno i domini individuati durante la _Domain Analysis_
 dal punto di vista del sistema informatico che dovrà essere realizzato, identificando i
 suoi _bounded context_ e le relazioni tra di essi.
 
@@ -38,47 +38,47 @@ Di seguito, si riportano i _bounded context_ individuati, ognuno descritto da un
 
 ### Authentication
 
-L'**Authentication** è il _bounded context_ corrispondente all'**Authentication Subdomain**
+L'**Authentication Bounded Context** è il _bounded context_ corrispondente all'**Authentication Subdomain**
 e si occupa della gestione della registrazione e dell'autenticazione degli utenti nel sistema.
 
-In particolare, viene utilizzato dal **Frontend** e utilizza l'**Authentication Storage**.
+In particolare, viene utilizzato dal **Frontend Bounded Context** e utilizza l'**Authentication Storage Bounded Context**.
 
 ![Authentication bounded context](/docs/resources/images/bounded-contexts/authentication-bounded-context.jpg)
 
 ### Authentication Storage
 
-L'**Authentication Storage** è il _bounded context_ corrispondente all'**Authentication Storage Subdomain**
+L'**Authentication Storage Bounded Context** è il _bounded context_ corrispondente all'**Authentication Storage Subdomain**
 e si occupa della gestione della persistenza dei dati degli utenti nel sistema.
 
-In particolare, viene utilizzato dall'**Authentication**.
+In particolare, viene utilizzato dall'**Authentication Bounded Context**.
 
 ![Authentication storage bounded context](/docs/resources/images/bounded-contexts/authentication-storage-bounded-context.jpg)
 
 ### Statistics
 
-Lo **Statistics** è il _bounded context_ corrispondente allo **Statistics Subdomain**
+Lo **Statistics Bounded Context** è il _bounded context_ corrispondente allo **Statistics Subdomain**
 e si occupa della gestione dei punteggi dei giocatori e della classifica globale del sistema.
 
-In particolare, viene utilizzato dal **Frontend** e dal **Game Manager** e utilizza lo
-**Statistics Storage**.
+In particolare, viene utilizzato dal **Frontend Bounded Context** e dal **Game Manager Bounded Context** e utilizza lo
+**Statistics Storage Bounded Context**.
 
 ![Statistics bounded context](/docs/resources/images/bounded-contexts/statistics-bounded-context.jpg)
 
 ### Statistics Storage
 
-Lo **Statistics Storage** è il _bounded context_ corrispondente allo **Statistics Storage Subdomain**
+Lo **Statistics Storage Bounded Context** è il _bounded context_ corrispondente allo **Statistics Storage Subdomain**
 e si occupa della gestione della persistenza dei punteggi dei giocatori del sistema.
 
-In particolare, viene utilizzato dallo **Statistics**.
+In particolare, viene utilizzato dallo **Statistics Bounded Context**.
 
 ![Statistics storage bounded context](/docs/resources/images/bounded-contexts/statistics-storage-bounded-context.jpg)
 
 ### Game Executor
 
-Il **Game Executor** è un _bounded context_ appartenente al **Chess Game Subdomain**
+Il **Game Executor Bounded Context** è un _bounded context_ appartenente al **Chess Game Subdomain**
 e si occupa della gestione dell'esecuzione di una partita di scacchi nel sistema.
 
-In particolare, viene utilizzato dal **Game Manager** e si basa sui componenti dell'[engine
+In particolare, viene utilizzato dal **Game Manager Bounded Context** e si basa sui componenti dell'[engine
 degli scacchi legacy](https://github.com/jahrim/PPS-22-chess), realizzato per il progetto di
 Paradigmi di Programmazione e Sviluppo.
 
@@ -86,23 +86,23 @@ Paradigmi di Programmazione e Sviluppo.
 
 ### Game Manager
 
-Il **Game Manager** è un _bounded context_ appartenente al **Chess Game Subdomain**
+Il **Game Manager Bounded Context** è un _bounded context_ appartenente al **Chess Game Subdomain**
 e si occupa della gestione della creazione, rimozione e ricerca delle partite di scacchi
 nel sistema, oltre che della connessione dei giocatori a tali partite.
 
-In particolare, viene utilizzato dal **Frontend** e utilizza lo **Statistics** e il
-**Game Executor**.
+In particolare, viene utilizzato dal **Frontend Bounded Context** e utilizza lo **Statistics Bounded Context** e il
+**Game Executor Bounded Context**.
 
 ![Game manager bounded context](/docs/resources/images/bounded-contexts/game-manager-bounded-context.jpg)
 
 ### Frontend
 
-Il **Frontend** è un _bounded context_ appartenente al **Web Application Subdomain**
+Il **Frontend Bounded Context** è un _bounded context_ appartenente al **Web Application Subdomain**
 e si occupa della presentazione del sistema e della comunicazione tra gli utenti umani
 del sistema e il sistema stesso.
 
-In particolare, viene utilizzato dagli utenti umani del sistema e utilizza l'**Authentication**,
-lo **Statistics** e il **Game Manager**.
+In particolare, viene utilizzato dagli utenti umani del sistema e utilizza l'**Authentication Bounded Context**,
+lo **Statistics Bounded Context** e il **Game Manager Bounded Context**.
 
 ![Frontend bounded context](/docs/resources/images/bounded-contexts/frontend-bounded-context.jpg)
 
@@ -123,8 +123,8 @@ dominio, per i quali si è deciso di risparmiare delle risorse in termini di tem
 sviluppo potrebbe essere assegnato allo stesso membro del team, in modo da ridurre la complessità della
 coordinazione tra gli eventuali collaboratori dovuta a relazioni di tipo supplier-consumer conformiste.
 
-Infine, nella _context map_ è stata esplicitata anche la relazione tra il **Game Executor** e il **Legacy Chess Engine**,
-per cui il primo assume il ruolo di interfaccia verso i componenti del secondo.
+Infine, nella _context map_ è stata esplicitata anche la relazione tra il **Game Executor Bounded Context** e
+il **Legacy Chess Engine**, per cui il primo assume il ruolo di interfaccia verso i componenti del secondo.
 
 ---
 

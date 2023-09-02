@@ -7,7 +7,7 @@ nav_order: 3
 # Domain Analysis
 {: .no_toc}
 
-In questo capitolo, si descriverà il processo di _Knowledge Crunching_ adoperato
+In questo capitolo si descriverà il processo di _Knowledge Crunching_ adoperato
 per esplorare il dominio del problema da risolvere, identificando i processi di
 cui si compone e le entità coinvolte in tali processi, quindi suddividendo il
 dominio in sottodomini e formalizzando la conoscenza acquisita attraverso un
