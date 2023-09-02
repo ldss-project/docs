@@ -41,7 +41,7 @@ Di seguito, si riportano i _bounded context_ individuati, ognuno descritto da un
 L'**Authentication** è il _bounded context_ corrispondente all'**Authentication Subdomain**
 e si occupa della gestione della registrazione e dell'autenticazione degli utenti nel sistema.
 
-In particolare, viene utilizzato dal **Frontend** e utilizza l'**Authentication Storage**
+In particolare, viene utilizzato dal **Frontend** e utilizza l'**Authentication Storage**.
 
 ![Authentication bounded context](/docs/resources/images/bounded-contexts/authentication-bounded-context.jpg)
 
@@ -123,7 +123,7 @@ dominio, per i quali si è deciso di risparmiare delle risorse in termini di tem
 sviluppo potrebbe essere assegnato allo stesso membro del team, in modo da ridurre la complessità della
 coordinazione tra gli eventuali collaboratori dovuta a relazioni di tipo supplier-consumer conformiste.
 
-Infine, nella _context map_ è stato evidenziata anche la relazione tra il **Game Executor** e il **Legacy Chess Engine**,
+Infine, nella _context map_ è stata esplicitata anche la relazione tra il **Game Executor** e il **Legacy Chess Engine**,
 per cui il primo assume il ruolo di interfaccia verso i componenti del secondo.
 
 ---
