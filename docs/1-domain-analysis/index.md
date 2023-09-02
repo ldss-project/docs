@@ -11,7 +11,11 @@ In questo capitolo, si descriverà il processo di _Knowledge Crunching_ adoperat
 per esplorare il dominio del problema da risolvere, identificando i processi di
 cui si compone e le entità coinvolte in tali processi, quindi suddividendo il
 dominio in sottodomini e formalizzando la conoscenza acquisita attraverso un
-_Ubiquitous Language_.
+_Ubiquitous Language_
+
+Gli scopi di questo processo sono di raccogliere conoscenza sul dominio, delineare
+delle aree di conoscenza più facilmente controllabili e migliorare la comunicazione
+nel team durante le fasi successive del progetto.
 
 ## Contenuti
 {: .no_toc}
@@ -250,6 +254,14 @@ Analizzando le similarità e le relazioni tra tali concetti, è stato quindi pos
 dominio del problema in diversi sottodomini. In maggiore dettaglio, sono stati individuati tre
 macro-domini:
 
+- **Authentication Subdomain**: racchiude tutti i concetti necessari per descrivere il profilo di un utente
+  nel sistema, permettendo la registrazione di nuovi utenti, l'autenticazione di utenti già registrati e
+  l'autorizzazione a operazioni sensibili, come l'aggiornamento del profilo di un utente. Per quanto riguarda la
+  persistenza di tali dati si potrebbe individuare un dominio separato, detto **Authentication Storage Subdomain**.
+- **Statistics Subdomain**: racchiude tutti i concetti necessari per descrivere le statistiche di un giocatore
+  del sistema, permettendo il salvataggio dei punteggi dei giocatori, il reperimento delle statistiche di un
+  giocatore e il reperimento della classifica globale dei giocatori. Per quanto riguarda la persistenza di tali
+  statistiche si potrebbe individuare un dominio separato, detto **Statistics Storage Subdomain**.
 - **Chess Game Subdomain**: racchiude tutti i concetti necessari per descrivere una partita di scacchi e le
   possibili interazioni con essa. In particolare, questi concetti possono essere raggruppati ulteriormente
   in altri sottodomini:
@@ -262,14 +274,6 @@ macro-domini:
     in una partita di scacchi, permettendo la promozione di un pedone e la terminazione di una partita.
   - **Move Subdomain**: racchiude tutti i concetti necessari per descrivere le mosse disponibili per un pezzo
     sulla scacchiera, permettendo la ricerca e l'applicazione delle sue mosse.
-- **Statistics Subdomain**: racchiude tutti i concetti necessari per descrivere le statistiche di un giocatore
-  del sistema, permettendo il salvataggio dei punteggi dei giocatori, il reperimento delle statistiche di un
-  giocatore e il reperimento della classifica globale dei giocatori. La gestione della memorizzazione di tali
-  statistiche può essere affidata a un dominio separato, detto **Statistics Storage Subdomain**;
-- **Authentication Subdomain**: racchiude tutti i concetti necessari per descrivere il profilo di un utente
-  nel sistema, permettendo la registrazione di nuovi utenti, l'autenticazione di utenti già registrati e 
-  l'autorizzazione a operazioni sensibili, come l'aggiornamento del profilo di un utente. La gestione della
-  memorizzazione di tali dati può essere affidata a un dominio separato, detto **Authentication Storage Subdomain**.
 
 A questi si aggiunge il **Web Application Subdomain**, che gestisce la presentazione del sistema agli utenti finali e
 le interazioni tra tali utenti e gli altri sottodomini del problema.
