@@ -36,25 +36,26 @@ permettendone il riutilizzo in altri contesti di sviluppo in futuro.
 ### Architettura a microservizi
 
 I microservizi di cui si compone l'architettura del sistema sono i seguenti:
-- **Frontend Service**: modella il **Frontend Bounded Context**. 
-  Si occupa di esporre e presentare le funzionalità del sistema agli utenti umani
+- **Frontend Service**: modella il **Frontend Bounded Context**;
+  si occupa di esporre e presentare le funzionalità del sistema agli utenti umani
   dell'applicazione.
-- **Authentication Service**: modella l'**Authentication Bounded Context**.
-  Si occupa della gestione della registrazione e del'autenticazione degli utenti nel
+- **Authentication Service**: modella l'**Authentication Bounded Context**;
+  si occupa della gestione della registrazione e dell'autenticazione degli utenti nel
   sistema.
-  
   La persistenza dei dati degli utenti del servizio è delegata a un
   **Authentication Database**.
-- **Statistics Service**: modella lo **Statistics Bounded Context**.
-  Si occupa della gestione dei punteggi degli utenti nel sistema.
-
+- **Statistics Service**: modella lo **Statistics Bounded Context**;
+  si occupa della gestione dei punteggi degli utenti nel sistema.
   La persistenza dei punteggi degli utenti del servizio è delegata a uno
   **Statistics Database**.
 - **Chess Game Service**: modella il **Game Manager Bounded Context** e il
-  **Game Executor Bounded Context**.
-  Si occupa della gestione della creazione, rimozione e ricerca delle partite
-  di scacchi nel sistema, oltre che della connessione dei giocatori a tali
-  partite e del loro svolgimento.
+  **Game Executor Bounded Context**; si occupa della gestione della creazione,
+  rimozione e ricerca delle partite di scacchi nel sistema, oltre che della
+  connessione dei giocatori a tali partite e del loro svolgimento.
+
+Mentre il **Frontend Service**, l'**Authentication Service** e lo **Statistics Service**
+sono dei servizi stateless, il **Chess Game Service** è un servizio stateful, il cui stato
+consiste nell'insieme delle partite di scacchi e dello stato in cui si trovano.
 
 ![Microservice Architecture](/docs/resources/images/tactical-design/microservices.png)
 
@@ -73,9 +74,11 @@ In dettaglio, ogni servizio è stato scomposto in quattro strati concentrici:
 - **Adapters**: lo strato al di sopra delle porte. Un adapter abilita una
   specifica tecnologia per comunicare con una porta del servizio.
 - **Proxies**: lo strato al di sopra degli adapter. Un proxy è un componente dalla
-  parte dell'utente del servizio, che espone le funzionalità del servizio secondo
+  parte dell'utente di un servizio, che espone le funzionalità del servizio secondo
   lo specifico caso d'uso necessario all'utente e minimizza i danni causati da
   eventuali cambiamenti di interfaccia del servizio (fungendo da _Anti-Corruption Layer_).
+  Un servizio potrebbe necessitare di un proxy nel caso in cui dipendesse da un altro
+  servizio.
 
 Allo scopo di facilitare la creazione di servizi che aderiscono alle buone pratiche
 della _Clean Architecture_, si è deciso di sviluppare una libreria che modella questi
@@ -84,6 +87,16 @@ la libreria offre un DSL per definire in modo dichiarativo dei servizi ed esegui
 il deployment.
 
 ## Architettura di dettaglio del sistema
+
+Come seconda fase del _Tactical Design_, si è deciso di approfondire l'architettura
+introdotta nella fase precedente, stabilendo le tecnologie utilizzate dai servizi per
+comunicare tra di loro e conseguentemente i loro contratti.
+
+### Tecnologie utilizzate
+
+![Detailed Microservice Architecture](/docs/resources/images/tactical-design/detailed-microservices.png)
+
+### Contratti
 
 ---
 
