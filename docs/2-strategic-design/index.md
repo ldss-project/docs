@@ -69,8 +69,7 @@ In particolare, viene utilizzato dal **Frontend** e dal **Game Manager** e utili
 Lo **Statistics Storage** è il _bounded context_ corrispondente allo **Statistics Storage Subdomain**
 e si occupa della gestione della persistenza dei punteggi dei giocatori del sistema.
 
-In particolare, viene utilizzato dal **Frontend** e dal **Game Manager** e utilizza lo
-**Statistics Storage**.
+In particolare, viene utilizzato dallo **Statistics**.
 
 ![Statistics storage bounded context](/docs/resources/images/bounded-contexts/statistics-storage-bounded-context.jpg)
 
@@ -113,6 +112,19 @@ Dopo aver individuato i _bounded context_ del sistema, sono state analizzate le 
 dipendenze tra di essi, producendo una _context map_ per rappresentarle graficamente.
 
 ![Context Map](/docs/resources/images/context-map/context-map.png)
+
+Come mostrato dalla _context map_, per le interazioni verso _bounded context_ appartenenti a domini 
+core diversi dal proprio, si é deciso di proteggere il consumatore attraverso un _Anti-Corruption Layer_,
+in modo da minimizzare i danni al consumatore nel caso in cui l'interfaccia dei fornitori cambiasse.
+Infatti, per i domini core si prevede un'evoluzione continua e quindi un'interfaccia molto dinamica.
+
+Tale _Anti-Corruption Layer_ non è stato adottato invece per i _bounded context_ appartenenti allo stesso
+dominio, per i quali si è deciso di risparmiare delle risorse in termini di tempo, considerando che il loro
+sviluppo potrebbe essere assegnato allo stesso membro del team, in modo da ridurre la complessità della
+coordinazione tra gli eventuali collaboratori dovuta a relazioni di tipo supplier-consumer conformiste.
+
+Infine, nella _context map_ è stato evidenziata anche la relazione tra il **Game Executor** e il **Legacy Chess Engine**,
+per cui il primo assume il ruolo di interfaccia verso i componenti del secondo.
 
 ---
 
