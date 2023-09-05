@@ -116,44 +116,62 @@ esposte dai vari servizi e di come accedervi.
 
 #### Authentication Database
 
-User Schema
+Il contratto dell'**Authentication Database** descrive la struttura dei dati contenuti nel database,
+ovvero la rappresentazione di un utente guest e di un utente autenticato nel sistema. Sulla base di
+questa struttura, altri servizi potranno definire delle query da richiedere al database.
+
+Un utente nel sistema può essere modellato come un'_entità_ descritta dai seguenti attributi:
+- _Username_: un _value object_ che modella il nome dell'utente, usato come un identificatore
+  human-friendly all'interno del sistema;
+- _Password_: un _value object_ che modella la password dell'utente, utilizzata per permettere
+  all'utente di autenticarsi all'applicazione;
+- _Email_: un _value object_ che modella l'email dell'utente;
+- _Token_: un'_entità_ che modella il token dell'utente. Se presente, indica che l'utente è
+  autenticato all'applicazione.
+
+Di seguito, si riporta lo schema relativo a un utente nel database.
+
 ```yaml
-  title: User
-  description: A user in the authentication database.
-  properties:
-    # The unique id used to identify this user in the
-    # authentication database.
-    _id:
-      bsonType: objectId
-    # The unique name used to identify this user in the
-    # authentication database.
-    username:             
-      bsonType: string
-    # The encrypted password of this user (salt and hash).
-    password:             
-      bsonType: string
-    # The email of this user.
-    email:                
-      bsonType: string
-    # The token assigned to this user, if authenticated.
-    token: Token
+title: User
+description: A user in the authentication database.
+properties:
+  # The unique machine-friendly id used to identify this user
+  # in the authentication database.
+  _id:
+    bsonType: objectId
+  # The unique human-friendly id used to identify this user
+  # in the authentication database.
+  username:             
+    bsonType: string
+  # The encrypted password of this user (salt and hash).
+  password:             
+    bsonType: string
+  # The email of this user.
+  email:                
+    bsonType: string
+  # The token assigned to this user, if authenticated.
+  token: Token
 ```
 
-Token Schema
+Un token nel sistema può essere modellato come un'_entità_, descritta da un _value object_
+rappresentante la data di scadenza del token.
+
+Di seguito, si riporta lo schema relativo a un token nel database.
+
 ```yaml
-  title: Token
-  description: A token in the authentication database.
-  properties:
-    # The unique id used to identify this token in the
-    # authentication database.
-    id:
-      bsonType: string
-    # The date of expiration of this token.
-    expiration:
-      bsonType: date
+title: Token
+description: A token in the authentication database.
+properties:
+  # The unique machine-friendly id used to identify this token in the
+  # authentication database.
+  id:
+    bsonType: string
+  # The date of expiration of this token.
+  expiration:
+    bsonType: date
 ```
 
-Guest user example
+Pertanto, ad esempio un utente guest nel sistema può essere rappresentato dal seguente _JSON_.
 ```yaml
 {
   "_id": { "$oid": "64ad811808f8e112f8c06521" },
@@ -163,7 +181,7 @@ Guest user example
 }
 ```
 
-Authenticated user example
+Mentre, un utente autenticato nel sistema può essere rappresentato dal seguente _JSON_.
 ```yaml
 {
   "_id": { "$oid": "64ad811808f8e112f8c06521" },
@@ -172,83 +190,123 @@ Authenticated user example
   "email": "example.user@chessgame.com",
   "token": {
     "id": "bb9763cc-ac0b-462b-88d0-2b0c66fe0cd1",
-    "expiration": { 
-      "$date": { "$numberLong": "1689326583861" }
-    }
+    "expiration": { "$date": { "$numberLong": "1689326583861" } }
   }
 }
 ```
 
 #### Authentication Service
 
-[REST API](/swagger-apis/authentication-service/latest/rest)
+Il contratto dell'**Authentication Service** espone le funzionalità relative alla registrazione e
+all'autenticazione degli utenti nel sistema.
+
+In particolare, le funzionalità esposte dal servizio sono le seguenti:
+- **Sign in**: permette a un utente guest di registrarsi all'applicazione, rendendosi noto come
+  utilizzatore del sistema e diventando un utente autenticato;
+- **Log in**: permette a un utente guest di autenticarsi all'applicazione, identificandosi come
+  uno tra gli utilizzatori noti al sistema e diventando un utente autenticato;
+- **Log out**: permette a un utente autenticato di revocare la propria autenticazione all'applicazione,
+  diventando un utente guest;
+- **Get profile**: permette a un utente autenticato di ottenere le informazioni riguardanti il proprio
+  profilo utente;
+- **Update password**: permette a un utente autenticato di modificare la propria password.
+
+Il contratto di questo servizio è un contratto *REST*, le cui specifiche sono disponibili al
+seguente [link](/swagger-apis/authentication-service/latest/rest). All'interno delle specifiche
+sono descritti in maggior dettaglio le modalità d'interazione con il servizio e i modelli dei dati
+scambiati durante tali interazioni.
+
+> _**NOTA**_: i contratti _REST_ del sistema sono stati definiti seguendo le specifiche di
+> [OpenAPI](https://swagger.io/specification/).
 
 #### Statistics Database
 
-Statistics Schema
+Il contratto dello **Statistics Database** descrive la struttura dei dati contenuti nel database,
+ovvero la rappresentazione del punteggio e delle statistiche di un giocatore. Sulla base di
+questa struttura, altri servizi potranno definire delle query da richiedere al database.
+
+Le statistiche di un giocatore possono essere modellate come un'_entità_ descritta dai seguenti
+attributi:
+- _Username_: un _value object_ che modella il nome del giocatore a cui appartengono le statistiche,
+  usato come un identificatore human-friendly all'interno del sistema;
+- _Latest Scores_: una sequenza di _value object_ che modellano i punteggi che il giocatore ha ottenuto
+  nel sistema, nell'ordine in cui sono stati ottenuti.
+
+Di seguito, si riporta lo schema relativo alle statistiche di un giocatore nel database.
+
 ```yaml
-  title: Statistics
-  description: The statistics of a player in the statistics database.
-  properties:
-    # The unique id used to identify this set of statistics in the 
-    # statistics database.
-    _id:
-      bsonType: objectId
-    # The player who owns this statistics. Used to identify this
-    # set of statistics in the statistics database.
-    username:
-      bsonType: string
-    # The scores achieved by this player in the order they were
-    # achieved.
-    latestScores:
-      bsonType: array
-      items: Score
+title: Statistics
+description: The statistics of a player in the statistics database.
+properties:
+  # The unique machine-friendly id used to identify this set of
+  # statistics in the statistics database.
+  _id:
+    bsonType: objectId
+  # The player who owns this statistics. Used as a human-friendly
+  # id of this set of statistics in the statistics database.
+  username:
+    bsonType: string
+  # The scores achieved by this player in the order they were
+  # achieved.
+  latestScores:
+    bsonType: array
+    items: Score
 ```
 
-Score Schema
+Il punteggio di un giocatore nel sistema può essere modellato come un _value object_ con i seguenti attributi:
+- **Insertion Date**: un _value object_ che modella la data di inserimento del punteggio nelle
+  statistiche del giocatore;
+- **Rank**: un _value object_ che modella la posizione in classifica del giocatore nel momento in
+  cui questo punteggio è stato inserito;
+- **Wins**: un _value object_ che modella il numero di vittorie del giocatore nel momento in cui
+  questo punteggio è stato inserito;
+- **Losses**: un _value object_ che modella il numero di sconfitte del giocatore nel momento in cui
+  questo punteggio è stato inserito;
+- **Ratio**: un _value object_ che modella il quoziente tra le vittorie e le sconfitte del giocatore
+  nel momento in cui questo punteggio è stato inserito.
+
+Di seguito, si riporta lo schema relativo a un punteggio nel database.
+
 ```yaml
-  title: Score
-  description: The score of a player bound to a specific time.
-  properties:
-    # The date when this score was achieved by its owner.
-    insertion:
-      bsonType: date
-    # The rank of the owner of this score when it was achieved.
-    rank:
-      bsonType: long
-    # The number of wins of the owner of this score when it was
-    # achieved.
-    wins:
-      bsonType: int
-    # The number of losses of the owner of this score when it
-    # was achieved.
-    losses:
-      bsonType: int
-    # The proportion between the wins and the losses of the
-    # owner of this score when it was achieved.
-    ratio:
-      bsonType: double
+title: Score
+description: The score of a player bound to a specific time.
+properties:
+  # The date when this score was achieved by its owner.
+  insertion:
+    bsonType: date
+  # The rank of the owner of this score when it was achieved.
+  rank:
+    bsonType: long
+  # The number of wins of the owner of this score when it was
+  # achieved.
+  wins:
+    bsonType: int
+  # The number of losses of the owner of this score when it
+  # was achieved.
+  losses:
+    bsonType: int
+  # The proportion between the wins and the losses of the
+  # owner of this score when it was achieved.
+  ratio:
+    bsonType: double
 ```
 
-Statistics Example
+Pertanto, ad esempio le statistiche di un giocatore nel sistema possono essere rappresentate dal seguente _JSON_.
+
 ```yaml
 {
   "_id": { "$oid": "64adad08b010d1f5ca422a14" },
   "username": "vittoriogiusti",
   "latestScores": [
     {
-      "insertion": {
-        "$date": { "$numberLong": "1686088800000" }
-      },
+      "insertion": { "$date": { "$numberLong": "1686088800000" } },
       "rank": { "$numberLong": "2" },
       "wins": { "$numberInt": "1" },
       "losses": { "$numberInt":"0" },
       "ratio": { "$numberDouble":"1.0" }
     },
     {
-      "insertion": {
-        "$date": { "$numberLong": "1686434400000" }
-      },
+      "insertion": { "$date": { "$numberLong": "1686434400000" } },
       "rank": { "$numberLong": "2" },
       "wins": { "$numberInt": "1" },
       "losses": { "$numberInt" : "1" },
@@ -260,14 +318,77 @@ Statistics Example
 
 #### Statistics Service
 
-[REST API](/swagger-apis/statistics-service/latest/rest)
+Il contratto dello **Statistics Service** espone le funzionalità relative all'inserimento dei
+punteggi dei giocatori nel sistema e al reperimento della classifica globale dei giocatori.
+
+In particolare, le funzionalità esposte dal servizio sono le seguenti:
+- **Get Latest Score**: permette a un utente di ottenere l'ultimo punteggio di un giocatore nel
+  sistema;
+- **Get Statistics**: permette a un utente di ottenere tutti i punteggi di un giocatore nel sistema;
+- **Get Leaderboard**: permette a un utente di ottenere la classifica globale dei giocatori nel sistema;
+- **Add Score**: permette a un utente di aggiungere un nuovo punteggio alle statistiche di un giocatore
+  del sistema;
+- **Delete Statistics**: permette a un utente di eliminare le statistiche di un giocatore nel sistema.
+
+Il contratto di questo servizio è un contratto *REST*, le cui specifiche sono disponibili al
+seguente [link](/swagger-apis/statistics-service/latest/rest). All'interno delle specifiche
+sono descritti in maggior dettaglio le modalità d'interazione con il servizio e i modelli dei dati
+scambiati durante tali interazioni.
 
 #### Chess Game Service
 
-[REST API](/swagger-apis/chess-game-service/latest/rest)
-[Websocket API](/swagger-apis/chess-game-service/latest/async)
+Il **Chess Game Service** prevede i due contratti seguenti:
+- **Game Management API**: espone le funzionalità relative alla creazione e ricerca delle
+  partite di scacchi nel sistema, oltre che della connessione dei giocatori a tali partite;
+- **Game Execution API**: espone le funzionalità relative allo svolgimento di una partita
+  di scacchi.
+
+In particolare, la **Game Management API** espone le seguenti funzionalità:
+- **Create Game**: permette a un utente di configurare e creare una partita di scacchi
+  nel sistema. Quindi, fornisce all'utente le coordinate per connettersi a tale partita.
+- **Find Private Game**: permette a un utente di ricercare una partita privata nel sistema,
+  conoscendone l'identificatore. Quindi, fornisce all'utente le coordinate per connettersi a
+  tale partita.
+- **Find Public Game**: permette a un utente di ricercare una partita pubblica qualsiasi nel
+  sistema. Quindi, fornisce all'utente le coordinate per connettersi a tale partita.
+
+La **Game Management API** è un contratto di tipo _REST_, le cui funzionalità sono disponibili al
+seguente [link](/swagger-apis/chess-game-service/latest/rest). All'interno delle specifiche
+sono descritti in maggior dettaglio le modalità d'interazione con il servizio e i modelli dei dati
+scambiati durante tali interazioni.
+
+Per quanto riguarda la **Game Execution API**, il contratto espone le seguenti funzionalità:
+- **Get State**: permette a un giocatore di ottenere lo stato del server che esegue la partita
+  di scacchi, incluso lo stato della partita stessa.
+- **Join Game**: permette a un giocatore di partecipare alla partita, specificando il proprio
+  nome e la squadra a cui si vuole essere assegnati.
+- **Find Moves**: permette a un giocatore di ottenere le mosse disponibili per un pezzo in una
+  specifica posizione sulla scacchiera.
+- **Apply Move**: permette a un giocatore di applicare una mossa a un pezzo sulla scacchiera.
+- **Promote**: permette a un giocatore di promuovere il pedone che è attualmente in attesa di
+  essere promosso.
+In questo contratto, il servizio reagisce alle richieste dell'utente in due modalità:
+- _Request-Response_: a ogni richiesta, il servizio produce una risposta corrispondente;
+- _Domain Events_: a ogni richiesta, il servizio può propagare degli eventi specifici. in
+  seguito a cambiamenti dello stato del server.
+
+La **Game Execution API** è un contratto di tipo _Websocket_, le cui funzionalità sono disponibili al
+seguente [link](/swagger-apis/chess-game-service/latest/async). All'interno delle specifiche
+sono descritti in maggior dettaglio le modalità d'interazione con il servizio, i modelli dei dati
+scambiati durante tali interazioni e gli eventi appartenenti al dominio del servizio.
+
+> _**NOTA**_: i contratti _Websocket_ del sistema sono stati definiti seguendo le specifiche di
+> [AsyncAPI](https://www.asyncapi.com/docs/reference/specification/v2.6.0).
 
 #### Frontend Service
+
+Il contratto del **Frontend Service** espone le funzionalità relative all'esposizione e 
+presentazione delle funzionalità degli altri servizi del sistema agli utenti umani
+dell'applicazione.
+
+Il contratto prevede semplicemente la possibilità di connettersi al dominio del servizio
+tramite browser per poter accedere a un'applicazione web. Tale applicazione gestisce la
+presentazione del sistema e la comunicazione tra utenti umani e gli altri servizi del sistema.
 
 ---
 
