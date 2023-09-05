@@ -367,6 +367,7 @@ Per quanto riguarda la **Game Execution API**, il contratto espone le seguenti f
 - **Apply Move**: permette a un giocatore di applicare una mossa a un pezzo sulla scacchiera.
 - **Promote**: permette a un giocatore di promuovere il pedone che è attualmente in attesa di
   essere promosso.
+
 In questo contratto, il servizio reagisce alle richieste dell'utente in due modalità:
 - _Request-Response_: a ogni richiesta, il servizio produce una risposta corrispondente;
 - _Domain Events_: a ogni richiesta, il servizio può propagare degli eventi specifici. in
