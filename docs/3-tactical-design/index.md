@@ -54,7 +54,7 @@ I microservizi di cui si compone l'architettura del sistema sono i seguenti:
   connessione dei giocatori a tali partite e del loro svolgimento.
 
 Mentre il **Frontend Service**, l'**Authentication Service** e lo **Statistics Service**
-sono dei servizi stateless, il **Chess Game Service** è un servizio stateful, il cui stato
+sono dei servizi _stateless_, il **Chess Game Service** è un servizio _stateful_, il cui stato
 consiste nell'insieme delle partite di scacchi e dello stato in cui si trovano.
 
 ![Microservice Architecture](/docs/resources/images/tactical-design/microservices.png)
@@ -62,7 +62,7 @@ consiste nell'insieme delle partite di scacchi e dello stato in cui si trovano.
 ### Clean Architecture
 
 Per la progettazione dei microservizi del sistema, si è deciso di adottare le
-buone pratiche della _Clean Architecture_, anche detta _Architettura Esagonale_.
+buone pratiche della _Clean Architecture_, anche detta _Hexagonal Architecture_.
 
 In dettaglio, ogni servizio è stato scomposto in quattro strati concentrici:
 - **Modelli**: lo strato più interno al sistema. Un modello contiene la business
@@ -125,7 +125,8 @@ Un utente nel sistema può essere modellato come un'_entità_ descritta dai segu
   human-friendly all'interno del sistema;
 - _Password_: un _value object_ che modella la password dell'utente, utilizzata per permettere
   all'utente di autenticarsi all'applicazione;
-- _Email_: un _value object_ che modella l'email dell'utente;
+- _Email_: un _value object_ che modella l'email dell'utente, utilizzata come un esempio di dato
+  che potrebbe appartenere al profilo di un utente;
 - _Token_: un'_entità_ che modella il token dell'utente. Se presente, indica che l'utente è
   autenticato all'applicazione.
 
@@ -171,7 +172,7 @@ properties:
     bsonType: date
 ```
 
-Pertanto, ad esempio un utente guest nel sistema può essere rappresentato dal seguente _JSON_.
+Ad esempio, un utente guest nel sistema può essere rappresentato dal seguente _JSON_:
 ```yaml
 {
   "_id": { "$oid": "64ad811808f8e112f8c06521" },
@@ -181,7 +182,7 @@ Pertanto, ad esempio un utente guest nel sistema può essere rappresentato dal s
 }
 ```
 
-Mentre, un utente autenticato nel sistema può essere rappresentato dal seguente _JSON_.
+Mentre, un utente autenticato nel sistema può essere rappresentato dal seguente _JSON_:
 ```yaml
 {
   "_id": { "$oid": "64ad811808f8e112f8c06521" },
@@ -217,7 +218,7 @@ sono descritti in maggior dettaglio le modalità d'interazione con il servizio e
 scambiati durante tali interazioni.
 
 > _**NOTA**_: i contratti _REST_ del sistema sono stati definiti seguendo le specifiche di
-> [OpenAPI](https://swagger.io/specification/).
+> [OpenAPI](https://spec.openapis.org/oas/v3.0.0).
 
 #### Statistics Database
 
@@ -291,7 +292,7 @@ properties:
     bsonType: double
 ```
 
-Pertanto, ad esempio le statistiche di un giocatore nel sistema possono essere rappresentate dal seguente _JSON_.
+Ad esempio, le statistiche di un giocatore nel sistema possono essere rappresentate dal seguente _JSON_:
 
 ```yaml
 {
@@ -370,7 +371,7 @@ Per quanto riguarda la **Game Execution API**, il contratto espone le seguenti f
 
 In questo contratto, il servizio reagisce alle richieste dell'utente in due modalità:
 - _Request-Response_: a ogni richiesta, il servizio produce una risposta corrispondente;
-- _Domain Events_: a ogni richiesta, il servizio può propagare degli eventi specifici. in
+- _Domain Events_: a ogni richiesta, il servizio può propagare degli eventi specifici, in
   seguito a cambiamenti dello stato del server.
 
 La **Game Execution API** è un contratto di tipo _Websocket_, le cui funzionalità sono disponibili al
@@ -395,11 +396,10 @@ presentazione del sistema e la comunicazione tra utenti umani e gli altri serviz
 
 Il design e l'implementazione di ogni servizio possono essere approfonditi nelle rispettive
 pagine web:
-- [Frontend Service](https://ldss-project.github.io/frontend)
 - [Authentication Service](https://ldss-project.github.io/authentication-service)
 - [Statistics Service](https://ldss-project.github.io/statistics-service)
 - [Chess Game Service](https://ldss-project.github.io/chess-game-service)
-
+- [Frontend Service](https://ldss-project.github.io/frontend)
 ---
 
 [Back to Top](#top) |
