@@ -391,6 +391,15 @@ Il contratto prevede semplicemente la possibilità di connettersi al dominio del
 tramite browser per poter accedere a un'applicazione web. Tale applicazione gestisce la
 presentazione del sistema e la comunicazione tra utenti umani e gli altri servizi del sistema.
 
+### Dettagli aggiuntivi
+
+Il design e l'implementazione di ogni servizio possono essere approfonditi nelle rispettive
+pagine web:
+- [Frontend Service](https://ldss-project.github.io/frontend)
+- [Authentication Service](https://ldss-project.github.io/authentication-service)
+- [Statistics Service](https://ldss-project.github.io/statistics-service)
+- [Chess Game Service](https://ldss-project.github.io/chess-game-service)
+
 ---
 
 [Back to Top](#top) |
