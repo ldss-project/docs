@@ -94,9 +94,180 @@ comunicare tra di loro e conseguentemente i loro contratti.
 
 ### Tecnologie utilizzate
 
+Di seguito, si riporta un diagramma che mostra le tecnologie utilizzate per la comunicazione tra i 
+servizi del sistema.
+
 ![Detailed Microservice Architecture](/docs/resources/images/tactical-design/detailed-microservices.png)
 
+Come mostrato dal diagramma, tutti i servizi espongono un adapter HTTP per permettere all'utente di
+interagirvi tramite browser. Inoltre, il **Chess Game Service** supporta anche una comunicazione
+basata su Websocket, ideale per una comunicazione bidirezionale in tempo reale e per poter gestire
+la sottoscrizione ad eventuali eventi del servizio.
+
+Infine, per quanto riguarda i database, sono stati scelti dei database _Document-Oriented_, ovvero un
+tipo particolare di database _NoSQL_, in cui i dati sono rappresentati come dei documenti, invece che
+come tabelle, quindi risultando più flessibili durante la modellazione del dominio. Più in dettaglio,
+per il formato dei documenti si è scelto il _BSON (Binary JSON)_.
+
 ### Contratti
+
+Di seguito, si riportano i contratti dei servizi del sistema, ovvero le descrizioni delle funzionalità
+esposte dai vari servizi e di come accedervi.
+
+#### Authentication Database
+
+User Schema
+```yaml
+  title: User
+  description: A user in the authentication database.
+  properties:
+    # The unique id used to identify this user in the
+    # authentication database.
+    _id:
+      bsonType: objectId
+    # The unique name used to identify this user in the
+    # authentication database.
+    username:             
+      bsonType: string
+    # The encrypted password of this user (salt and hash).
+    password:             
+      bsonType: string
+    # The email of this user.
+    email:                
+      bsonType: string
+    # The token assigned to this user, if authenticated.
+    token: Token
+```
+
+Token Schema
+```yaml
+  title: Token
+  description: A token in the authentication database.
+  properties:
+    # The unique id used to identify this token in the
+    # authentication database.
+    id:
+      bsonType: string
+    # The date of expiration of this token.
+    expiration:
+      bsonType: date
+```
+
+Guest user example
+```yaml
+{
+  "_id": { "$oid": "64ad811808f8e112f8c06521" },
+  "username": "ExampleGuestUser",
+  "password": "$2a$10$HNRNLhKyjLGCZ3/R6yj0QuenqRSdpRf/J4r0NvVhpNcnRYtSNJoIy",
+  "email": "example.user@chessgame.com",
+}
+```
+
+Authenticated user example
+```yaml
+{
+  "_id": { "$oid": "64ad811808f8e112f8c06521" },
+  "username": "ExampleAuthenticatedUser",
+  "password": "$2a$10$HNRNLhKyjLGCZ3/R6yj0QuenqRSdpRf/J4r0NvVhpNcnRYtSNJoIy",
+  "email": "example.user@chessgame.com",
+  "token": {
+    "id": "bb9763cc-ac0b-462b-88d0-2b0c66fe0cd1",
+    "expiration": { 
+      "$date": { "$numberLong": "1689326583861" }
+    }
+  }
+}
+```
+
+#### Authentication Service
+
+[REST API](/swagger-apis/authentication-service/latest/rest)
+
+#### Statistics Database
+
+Statistics Schema
+```yaml
+  title: Statistics
+  description: The statistics of a player in the statistics database.
+  properties:
+    # The unique id used to identify this set of statistics in the 
+    # statistics database.
+    _id:
+      bsonType: objectId
+    # The player who owns this statistics. Used to identify this
+    # set of statistics in the statistics database.
+    username:
+      bsonType: string
+    # The scores achieved by this player in the order they were
+    # achieved.
+    latestScores:
+      bsonType: array
+      items: Score
+```
+
+Score Schema
+```yaml
+  title: Score
+  description: The score of a player bound to a specific time.
+  properties:
+    # The date when this score was achieved by its owner.
+    insertion:
+      bsonType: date
+    # The rank of the owner of this score when it was achieved.
+    rank:
+      bsonType: long
+    # The number of wins of the owner of this score when it was
+    # achieved.
+    wins:
+      bsonType: int
+    # The number of losses of the owner of this score when it
+    # was achieved.
+    losses:
+      bsonType: int
+    # The proportion between the wins and the losses of the
+    # owner of this score when it was achieved.
+    ratio:
+      bsonType: double
+```
+
+Statistics Example
+```yaml
+{
+  "_id": { "$oid": "64adad08b010d1f5ca422a14" },
+  "username": "vittoriogiusti",
+  "latestScores": [
+    {
+      "insertion": {
+        "$date": { "$numberLong": "1686088800000" }
+      },
+      "rank": { "$numberLong": "2" },
+      "wins": { "$numberInt": "1" },
+      "losses": { "$numberInt":"0" },
+      "ratio": { "$numberDouble":"1.0" }
+    },
+    {
+      "insertion": {
+        "$date": { "$numberLong": "1686434400000" }
+      },
+      "rank": { "$numberLong": "2" },
+      "wins": { "$numberInt": "1" },
+      "losses": { "$numberInt" : "1" },
+      "ratio": { "$numberDouble" : "1.0" }
+    },
+  ]
+}
+```
+
+#### Statistics Service
+
+[REST API](/swagger-apis/statistics-service/latest/rest)
+
+#### Chess Game Service
+
+[REST API](/swagger-apis/chess-game-service/latest/rest)
+[Websocket API](/swagger-apis/chess-game-service/latest/async)
+
+#### Frontend Service
 
 ---
 
