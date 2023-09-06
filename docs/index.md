@@ -20,6 +20,7 @@ Questa è la documentazione relativa al progetto per il corso di
 
 Per la documentazione specifica degli servizi e degli artefatti realizzati,
 si rimanda ai corrispondenti repository:
+- [Swagger APIs](https://github.com/ldss-project/swagger-apis)
 - [Frontend Service](https://github.com/ldss-project/frontend)
 - [Authentication Service](https://github.com/ldss-project/authentication-service)
 - [Statistics Service](https://github.com/ldss-project/statistics-service)

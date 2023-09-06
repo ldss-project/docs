@@ -23,7 +23,8 @@ L'obiettivo del progetto è quello di realizzare un'applicazione web
 che permetta di giocare online a scacchi.
 
 Tale applicazione sarà realizzata a partire dall'engine degli scacchi
-già implementato per il corso di Paradigmi di Programmazione e Sviluppo
+già implementato per il corso di 
+[Paradigmi di Programmazione e Sviluppo 2022-2023](https://www.unibo.it/it/didattica/insegnamenti/insegnamento/2022/412597)
 (reperibile al seguente [link](https://github.com/jahrim/PPS-22-chess)),
 che sarà modificato opportunamente e a cui saranno aggiunte nuove funzionalità.
 
