@@ -68,7 +68,7 @@ Di seguito, si riporta la struttura della _GitHub Organization_ creata:
 
 ### DVCS Workflow
 
-Durante lo sviluppo del sistema, si è cercato il più possibile di suddividere il lavoro tra i membri del team
+Durante lo sviluppo del sistema, si è cercato il più possibile di suddividere il lavoro tra i membri del team,
 in modo da ridurre al minimo i possibili conflitti di pubblicazione del codice sui _repository_. In particolare,
 nella maggior parte dei casi, a ogni _repository_ ha lavorato principalmente un unico membro del team, con piccole
 eccezioni durante l'integrazione tra i vari moduli del sistema.
@@ -123,7 +123,7 @@ In particolare, la versione del software viene modificata come segue:
   del _repository_ viene incrementata di una _Minor_;
 - Altrimenti, se la storia dei commit dall'ultima versione contiene un commit di tipo **fix**, la versione
   del _repository_ viene incrementata di una _Patch_;
-- Altrimenti, se la versione non viene modificata.
+- Altrimenti, la versione non viene modificata.
 
 In questo progetto, non si è mai fatto uso di _Breaking Change_ esplicitamente, infatti i moduli realizzati
 sono ancora in una versione instabile, per cui ogni modifica del software potrebbe comportare delle modifiche
@@ -134,9 +134,9 @@ sostanziali alla sua API.
 Per evitare di dover definire la stessa configurazione per ogni _repository_ quando creato, sono stati utilizzati
 dei _Template Repository_.
 
-In particolare, per la documentazione dei moduli, inclusa questa documentazione, è stato applicato un template di
-terze parti, chiamato [just-the-docs](https://just-the-docs.com/), mentre per l'inizializzazione di progetti Scala
-3 è stato create un template interno, chiamato [scala3-project-template](https://github.com/ldss-project/scala3-project-template).
+In particolare, per la documentazione dei moduli è stato applicato un template di terze parti, chiamato
+[just-the-docs](https://just-the-docs.com/), mentre per l'inizializzazione di progetti Scala 3 è stato
+creato un template interno, chiamato [scala3-project-template](https://github.com/ldss-project/scala3-project-template).
 
 Un altro metodo utilizzato agli stessi scopi, è quello di creare delle _fork_ da progetti pre-configurati. Ad
 esempio, questa stessa documentazione è stata creata a partire da una _fork_ della documentazione del progetto
@@ -154,7 +154,7 @@ degli artefatti del sistema.
 ### Build Automation Tools
 
 I principali strumenti di _build automation_ utilizzati in questo progetto sono:
-- [Gradle](https://gradle.org/): utilizzato per generare e pubblicare gli artefatti dei progetti Scala 3;
+- [Gradle](https://gradle.org/): utilizzato per generare e pubblicare gli artefatti dei progetti Scala 3.
 - [npm](https://www.npmjs.com/): utilizzato per generare gli artefatti del **Frontend Service** e per
   l'integrazione di [Semantic Release](https://github.com/semantic-release/semantic-release) nei moduli del sistema.
 
@@ -177,7 +177,7 @@ aperte automaticamente delle pull request sul _repository_ per aggiornare tali d
 concetti equivalenti di altri strumenti di _build automation_, come i _package.json_ di [npm](https://www.npmjs.com/),
 per cui è stato possibile abilitarlo anche per il **Frontend Service**.
 
-### Project Information
+### Module Information
 
 Le informazioni e i metadati relativi ai moduli del sistema sono racchiusi nel _build.gradle.kts_ in
 una classe creata appositamente. Tali informazioni sono necessarie alla generazione degli artefatti e
@@ -206,7 +206,7 @@ private class ProjectInfo {
 private val projectInfo: ProjectInfo = ProjectInfo()
 ```
 
-## Quality Assurance
+### Quality Assurance
 
 Per il controllo di qualità dei moduli del sistema, sono stati utilizzati diverse categorie di strumenti:
 - **Linting Tools**: strumenti per il controllo dello stile del codice. Permettono agli sviluppatori di
@@ -246,7 +246,7 @@ appoggio:
   ```
   
   Come si può osservare, il plugin è stato utilizzato per configurare
-  [Scala Formatter](https://scalameta.org/scalafmt/) in modo che esegui ogni volta che il
+  [Scala Formatter](https://scalameta.org/scalafmt/) in modo che esegua ogni volta che il
   codice del modulo viene compilato e non solo durante la fase di _check_.
   Così facendo, la formattazione viene applicata anche quando il codice viene eseguito o testato
   all'interno di [IntelliJ Idea](https://www.jetbrains.com/idea/).
@@ -254,22 +254,21 @@ appoggio:
   che permette la configurazione di [WartRemover](https://www.wartremover.org/) come _code linter_
   per un progetto Scala 3.
 
-  Il plugin era stato realizzato come plugin privato all'interno del progetto per il corso di
+  Il plugin era stato realizzato come un'_API Extension_ all'interno del progetto per il corso di
   [Paradigmi di Programmazione e Sviluppo 2022-2023](https://www.unibo.it/it/didattica/insegnamenti/insegnamento/2022/412597)
   (reperibile al seguente [link](https://github.com/jahrim/PPS-22-chess)), dal quale è stato estratto, quindi 
   refattorizzato, testato e pubblicato su [Gradle Plugin Portal](https://plugins.gradle.org/).
   Il nuovo _repository_ del plugin è disponibile al seguente [link](https://github.com/ldss-project/wartremover-gradle-plugin).
-- [kotlin-qa](https://plugins.gradle.org/plugin/org.danilopianini.gradle-kotlin-qa): plugin che
-  permette la configurazione di [Detekt](https://github.com/detekt/detekt) e [Ktlint](https://github.com/pinterest/ktlint)
-  per un progetto Kotlin.
+- [kotlin-qa](https://github.com/DanySK/gradle-kotlin-qa): plugin che permette la configurazione di
+  [Detekt](https://github.com/detekt/detekt) e [Ktlint](https://github.com/pinterest/ktlint) per un progetto Kotlin.
 - [create-vue](https://github.com/vuejs/create-vue): lo script ufficiale per eseguire il _Project Scaffolding_
   per un progetto Vue, che include la configurazione di [ESLint](https://eslint.org/) e [Prettier](https://prettier.io/).
 
 ### Artifacts
 
 Per la generazione degli artefatti di ogni modulo, sono state predisposte tre task principali:
-- **sourcesJar**: produce il jar contenente i sorgenti del modulo;
-- **javadocJar**: produce il jar contenente la documentazione del modulo;
+- **sourcesJar**: produce il jar contenente i sorgenti del modulo.
+- **javadocJar**: produce il jar contenente la documentazione del modulo.
 - **jar**: produce il jar eseguibile di un modulo che può essere eseguito.
 
 Di seguito, si riporta la configurazione relativa a tali task.
@@ -359,7 +358,7 @@ signing {
 Siccome [Maven Central](https://central.sonatype.com/) necessita che gli artefatti siano firmati prima della
 chiusura del repository che li contiene, è stato necessario configurare il plugin [Signing](https://docs.gradle.org/current/userguide/signing_plugin.html)
 per utilizzare la chiave privata e la password dell'autore, in modo che il plugin potesse ricevere tali credenziali sotto
-forma di [project properties](https://docs.gradle.org/current/userguide/build_environment.html#sec:project_properties).
+forma di _project properties_.
 
 ### Publishing on Gradle Plugin Portal
 
@@ -371,15 +370,15 @@ Di seguito, si riporta la configurazione comunemente utilizzata per pubblicare i
 
 ```kotlin
 gradlePlugin {
-    website.set(ProjectInfo.website)
-    vcsUrl.set("${ProjectInfo.website}.git")
+    website.set(projectInfo.website)
+    vcsUrl.set("${projectInfo.website}.git")
     plugins {
         create("wartremover") {
-            id = "${ProjectInfo.artifactGroup}.${ProjectInfo.artifactId}"
-            displayName = ProjectInfo.longName
-            description = ProjectInfo.description
-            tags.set(ProjectInfo.tags)
-            implementationClass = ProjectInfo.implementationClass
+            id = "${projectInfo.artifactGroup}.${projectInfo.artifactId}"
+            displayName = projectInfo.longName
+            description = projectInfo.description
+            tags.set(projectInfo.tags)
+            implementationClass = projectInfo.implementationClass
         }
     }
 }
@@ -395,9 +394,8 @@ tasks.named("publishPlugins"){ dependsOn(setupPublishPlugin) }
 
 Come si può notare, la task per la pubblicazione dei plugin fornita dal
 [Gradle Publishing Plugin](https://plugins.gradle.org/plugin/com.gradle.plugin-publish) è stata configurata
-in modo da poter accettare delle [project properties](https://docs.gradle.org/current/userguide/build_environment.html#sec:project_properties)
-compatibili per essere specificate come variabili d'ambiente. In questo modo, sarà più facile utilizzare il
-plugin all'interno della _CI_.
+in modo da poter accettare delle _project properties_ compatibili per essere specificate come variabili d'ambiente.
+In questo modo, sarà più facile utilizzare il plugin all'interno della _CI_.
 
 ## Continuous Integration
 
