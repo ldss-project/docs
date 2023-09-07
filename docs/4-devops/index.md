@@ -132,7 +132,7 @@ sostanziali alla sua API.
 ### GitHub Template Repositories
 
 Per evitare di dover definire la stessa configurazione per ogni _repository_ quando creato, sono stati utilizzati
-dei _Template Repository_.
+dei _template repository_.
 
 In particolare, per la documentazione dei moduli è stato applicato un template di terze parti, chiamato
 [just-the-docs](https://just-the-docs.com/), mentre per l'inizializzazione di progetti Scala 3 è stato
@@ -397,18 +397,506 @@ Come si può notare, la task per la pubblicazione dei plugin fornita dal
 in modo da poter accettare delle _project properties_ compatibili per essere specificate come variabili d'ambiente.
 In questo modo, sarà più facile utilizzare il plugin all'interno della _CI_.
 
+### Docker Build
+
+Un altro aspetto importante della _build automation_ è la generazione di immagini per [Docker](https://www.docker.com/),
+che saranno uno tra gli strumenti più importanti per semplificare l'esecuzione del sistema nella sua interezza.
+
+A tale scopo, per ogni modulo eseguibile è stato definito un _Dockerfile_ che sarà utilizzato per costruire un'immagine
+del modulo e quindi pubblicarla successivamente.
+
+Per quanto riguarda il **Frontend Service**, è stato definito il seguente _Dockerfile_:
+
+```dockerfile
+FROM node:lts-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build-only          # vite build
+EXPOSE 8080
+CMD npm run dev:docker          # vite --host 0.0.0.0 --port 8080
+```
+
+Come si può osservare, il _Dockerfile_ si compone dei seguenti _stage_ principalmente:
+1. Inizializza un container con sistema operativo [Alpine Linux](https://www.alpinelinux.org/), provvisto
+   di [NodeJS](https://nodejs.org/);
+2. Copia i file contenenti le dipendenze del modulo;
+3. Installa le dipendenze del modulo;
+4. Copia tutti i sorgenti del modulo, selezionandoli attraverso un'opportuna configurazione
+   del file _.dockerignore_;
+5. Produce l'eseguibile per il modulo;
+6. Esegue il modulo.
+
+La suddivisione in _stage_ circoscritti è importante per sfruttare al meglio i meccanismi
+di caching di [Docker](https://www.docker.com/), riducendo notevolmente il tempo necessario a
+costruire l'immagine corrispondente al _Dockerfile_.
+
+Per quanto riguarda gli altri moduli basati su [Java](https://www.java.com/), è stato definito il seguente _Dockerfile_:
+
+```dockerfile
+FROM eclipse-temurin:17-alpine
+COPY ./build/libs/*.jar ./app/app.jar
+WORKDIR ./app
+EXPOSE 8080/tcp
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+Come si può osservare, il _Dockerfile_ si compone dei seguenti _stage_ principalmente:
+1. Inizializza un container con sistema operativo [Alpine Linux](https://www.alpinelinux.org/),
+   provvisto di [Java](https://www.java.com/);
+2. Copia il jar eseguibile del modulo, selezionandolo attraverso un'opportuna configurazione
+   del file _.dockerignore_;
+3. Esegue il modulo.
+
+Questo _Dockerfile_ ha il vantaggio di produrre immagini con dimensioni molto ridotte, tuttavia
+suppone che il jar eseguibile del modulo sia stato generato prima della costruzione dell'immagine.
+In particolare, queste dipendenze saranno gestite durante la pubblicazione delle immagini dei
+moduli del sistema all'interno della _continuous integration_.
+
 ## Continuous Integration
 
-TODO
+In questa sezione, si descriveranno gli strumenti e gli script utilizzati per la configurazione della
+_continuous integration_ dei moduli del sistema.
 
-Sul branch **master** è stata applicata una _branch protection policy_ per richiedere l'integrazione degli aggiornamenti
-tramite pull request, in modo da proteggere il branch da modifiche
+> _**NOTA**_: siccome ogni modulo del sistema può avere dei requisiti diversi per quanto riguarda la
+> _continuous integration_, per semplicità si riporterà solo l'approccio più comunemente utilizzato.
+
+### Continuous Integration Tools
+
+Come strumento principale per la configurazione della _continuous integration_ dei moduli del sistema,
+è stato utilizzato [GitHub Actions](https://github.com/features/actions), siccome è già integrato nelle
+_repository_ di GitHub.
+
+### Continuous Testing
+
+Per automatizzare l'esecuzione dei test nei moduli del sistema, è stato definito il seguente _workflow_:
+
+```yaml
+name: Test
+on:
+  pull_request:
+    paths-ignore:
+      - "README.md"
+      - "docs/**"
+jobs:
+    # Test the project
+    test:
+      strategy:
+        matrix:
+          os: [windows, macos, ubuntu]
+          java-version: [8, 11, 17]
+      runs-on: ${{matrix.os}}-latest
+      steps:
+        # Install the specified version of Java in the provided runner
+        - name: Install Java
+          uses: actions/setup-java@v3
+          with:
+            distribution: 'adopt'
+            java-version: ${{matrix.java-version}}
+        # Clone the repository, with full history and submodules
+        - name: Clone Repository
+          uses: actions/checkout@v3
+          with:
+            token: ${{ secrets.GH_TOKEN }}
+            fetch-depth: 0
+            submodules: recursive
+        # Validate the gradle wrapper to avoid supply chain attacks 
+        # from pull-requests that change the wrapper
+        - name: Validate Gradle Wrapper
+          uses: gradle/wrapper-validation-action@v1
+        # Run the project tests
+        - name: Test Build
+          run: |
+            chmod 777 ./gradlew
+            ./gradlew test
+
+    # Completes successfully if all previous job were completed
+    # successfully (i.e. exit code is 0)
+    success:
+      runs-on: ubuntu-22.04
+      needs:
+        - test
+      # Executes always (even if previous jobs have failed, but not if
+      # any of them has been cancelled)
+      if: >-
+        always() && (
+          contains(join(needs.*.result, ','), 'failure')
+          || !contains(join(needs.*.result, ','), 'cancelled')
+        )
+      # Succeeds only if all previous jobs have succeeded
+      steps:
+        - name: Verify that there were no failures
+          run: ${{ !contains(join(needs.*.result, ','), 'failure') }}
+```
+
+Come si può notare, il _workflow_ prevede i due _job_ seguenti: 
+- **test**: prevede i seguenti *step*:
+  1. Installa [Java](https://www.java.com/), per poter eseguire il _Gradle Wrapper_;
+  2. Clona il _repository_, per poter accedere al codice da testare;
+  3. Valida il _Gradle Wrapper_ utilizzato per eseguire i test, per verificare che non sia stato manomesso;
+  4. Esegue i test.
+
+  Questo _job_ viene eseguito per diversi sistemi operativi e versioni di [Java](https://www.java.com/)
+  attraverso una _build matrix_, aumentando la robustezza della verifica del sistema.
+- **success**: controlla i risultati di tutti i _job_ eseguiti precedentemente e ha successo solo se sono tutti
+  completati con successo.
+
+  Questo _job_ è stato utilizzato principalmente per la configurazione della _branch protection_ sul **master**,
+  per bloccare le pull request nel caso in cui non avesse avuto successo, evitando di dover specificare
+  tutti i _job_ generati dalla _build matrix_ di **test**.
+
+Siccome il _workflow_ esegue solamente quando una pull request viene aggiornata, è stato necessario definire una
+_branch protection_ sul **master** che permettesse modifiche sul branch solo quando provenienti da una pull
+request (impedendo una push diretta).
+In questo modo, fin quando la _branch protection_ è rispettata dagli sviluppatori, si è sicuri che il codice sul
+**master** sia propriamente testato.
+
+Un _workflow_ molto simile è stato realizzato anche per il **Frontend Service**, con l'unica differenza che si
+basa su [npm](https://www.npmjs.com/) + [Vitest](https://vitest.dev/) invece che su [Gradle](https://gradle.org/) +
+[JUnit](https://junit.org/junit5/).
+
+### Continuous Delivery
+
+Per automatizzare la pubblicazione e la distribuzione dei moduli del sistema, è stato definito il seguente _workflow_:
+
+```yaml
+name: Publish
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "README.md"
+      - "docs/**"
+
+jobs:
+  # Publish the project
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      GIT_COMMITTER_NAME: Jahrim Gabriele Cesario
+      GIT_COMMITTER_EMAIL: jahrim.cesario2@studio.unibo.it
+      GIT_AUTHOR_NAME: Jahrim Gabriele Cesario
+      GIT_AUTHOR_EMAIL: jahrim.cesario2@studio.unibo.it
+      DOCKER_REGISTRY_USER: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_SIGNING_KEY }}
+      ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_SIGNING_PASSWORD }}
+      ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+      ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+      ORG_GRADLE_PROJECT_gradlePublishKey: ${{ secrets.GRADLE_PORTAL_KEY }}
+      ORG_GRADLE_PROJECT_gradlePublishSecret: ${{ secrets.GRADLE_PORTAL_SECRET }}
+    steps:
+      # Install the specified version of Java in the provided runner
+      - name: Install Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: 8
+      # Install Node in the provided runner
+      - name: Install Node
+        uses: actions/setup-node@v3
+      # Clone the repository, with full history and submodules
+      - name: Clone Repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          fetch-depth: 0
+          submodules: recursive
+      # Validate the gradle wrapper to avoid supply chain attacks from
+      # pull-requests that change the wrapper
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+      # Publish artifacts on Maven, Gradle Portal, GitHub and/or Docker
+      - name: Publish on Maven, Gradle Portal, GitHub and/or Docker
+        run: |
+          npm clean-install
+          npx semantic-release
+```
+
+Come si può notare, il _workflow_ prevede un unico _job_:
+- **publish**: prevede i seguenti *step*:
+  1. Installa [Java](https://www.java.com/), per poter eseguire il _Gradle Wrapper_;
+  2. Installa [NodeJS](https://nodejs.org/); per poter eseguire lo script di 
+     [Semantic Release](https://github.com/semantic-release/semantic-release);
+  3. Clona il _repository_, per poter accedere al codice da pubblicare;
+  4. Valida il _Gradle Wrapper_ utilizzato per generare e pubblicare gli artefatti del modulo,
+     per verificare che non sia stato manomesso;
+  5. Esegue uno script di [Semantic Release](https://github.com/semantic-release/semantic-release) per
+     generare e pubblicare gli artefatti del modulo.
+
+  In questo _job_, sono specificati come variabili d'ambiente tutti i segreti necessari per autenticarsi
+  ai diversi repository su cui saranno pubblicati gli artefatti del modulo.
+
+Di seguito, si riporta uno script di [Semantic Release](https://github.com/semantic-release/semantic-release)
+che sintetizza gli script utilizzati per generare e pubblicare gli artefatti di ciascun modulo. Infatti, ogni
+modulo ha necessità di pubblicare gli artefatti su dei portali specifici e la soluzione per pubblicare su
+ciascun portale può essere estratta dallo script riportato.
+
+```yaml
+branch: master
+tagFormat: "${version}"
+plugins:
+  # Analyzes commits to identify the type of update (e.g. fix -> PATCH,
+  # feat -> MINOR...)
+  - "@semantic-release/commit-analyzer"
+
+  # Generates the changelog text in the release
+  - "@semantic-release/release-notes-generator"
+  - "@semantic-release/changelog"
+
+  # Executes a custom command for publishing
+  - - "@semantic-release/exec"
+    # Builds the project with the new evaluated version (creating an
+    # annotated tag with the new version and deleting it in order to not
+    # conflict with the other plugins)
+    - prepareCmd: |
+        git tag -a ${nextRelease.version} -f -m ${nextRelease.version}
+        chmod 777 ./gradlew
+        ./gradlew build
+        git tag -d ${nextRelease.version}
+        git pull --tags
+      # Publish on Maven and Gradle Portal
+      publishCmd: |
+        ./gradlew publish --no-parallel
+        ./gradlew publishPlugins --no-parallel
+
+  # Publish on GitHub
+  - - "@semantic-release/github"
+    - assets:
+      - path: "build/libs/*.jar"
+
+  # Publish on Docker
+  - - '@codedependant/semantic-release-docker'
+    - dockerTags: ["latest", "{{version}}"]
+      # (e.g. "jahrim/io.github.jahrim.chess.authentication-service")
+      dockerImage: "..."
+      dockerFile: "Dockerfile"
+```
+
+Uno script di [Semantic Release](https://github.com/semantic-release/semantic-release) è diviso
+in ulteriori script chiamati _plugin_. Ogni _plugin_ implementa una sequenza standard di _release step_.
+Quindi, per ogni _release step_, [Semantic Release](https://github.com/semantic-release/semantic-release)
+esegue l'implementazione di tale step fornita dai _plugin_ nell'ordine in cui sono stati definiti.
+
+I _plugin_ utilizzati dallo script di [Semantic Release](https://github.com/semantic-release/semantic-release)
+sopra riportato sono i seguenti:
+- [@semantic-release/commit-analyzer](https://github.com/semantic-release/commit-analyzer): analizza la storia
+  dei commit, eventualmente determinando la nuova versione del software da rilasciare;
+- [@semantic-release/release-notes-generator](https://github.com/semantic-release/release-notes-generator):
+  genera una lista dei cambiamenti che ha subito il software dall'ultima versione sulla base della sua storia
+  dei commit;
+- [@semantic-release/changelog](https://github.com/semantic-release/changelog): genera un file che contiene
+  la lista dei cambiamenti che ha subito il software dall'ultima versione;
+- [@semantic-release/exec](https://github.com/semantic-release//exec): esegue uno script personalizzabile.
+  In particolare, è stato utilizzato per generare gli artefatti del modulo e per pubblicarli su dei
+  portali non direttamente supportati da _plugin_ ufficiali di [Semantic Release](https://github.com/semantic-release/semantic-release).
+- [@semantic-release/github](https://github.com/semantic-release/github): pubblica gli artefatti del modulo
+  su GitHub, insieme al tag relativo alla _release_ degli artefatti.
+- [@codedependant/semantic-release-docker](https://github.com/esatterwhite/semantic-release-docker): pubblica
+  un'immagine [Docker](https://www.docker.com/) su [DockerHub](https://hub.docker.com/), dato il _Dockerfile_
+  con cui generarla.
+
+Nell'ordine in cui sono stati registrati i _plugin_, ci si è assicurati che, prima di qualsiasi tipo di
+pubblicazione, fossero generati gli artefatti del progetto.
+
+### Continuous Documentation Delivery
+
+Per quanto riguarda la pubblicazione della documentazione dei moduli del sistema, si è fatto affidamento
+alle _GitHub Pages_, ovvero dei siti web già integrati con le _repository_ GitHub.
+
+Gli artefatti relativi alle _GitHub Pages_ sono stati generati e pubblicati attraverso un _workflow_ fornito
+dal _template repository_ di [just-the-docs](https://just-the-docs.com/), configurato opportunamente per le
+necessità del modulo.
 
 ## Deployment
 
+In questa sezione, si descriveranno gli strumenti utilizzati per rendere possibile l'esecuzione del sistema
+nella sua interezza. Inoltre, si approfondirà come è possibile configurare l'esecuzione del sistema a proprio
+piacere.
+
+### Docker Compose
+
+Per eseguire il sistema nella sua interezza, si è fatto affidamento a [Docker Compose](https://docs.docker.com/compose/).
+In particolare, è stato definito il seguente _docker-compose_ file:
+
+```yaml
+version: "3.4"
+
+services:
+  authentication-service:
+    image: "jahrim/io.github.jahrim.chess.authentication-service:${AUTHENTICATION_SERVICE_VERSION:-latest}"
+    command:
+      - --mongodb-connection
+      - "${AUTHENTICATION_MONGODB_CONNECTION:?the authentication service won't be able to connect to MongoDB}"
+      - --mongodb-database
+      - "${AUTHENTICATION_MONGODB_DATABASE:-authentication}"
+      - --mongodb-collection
+      - "${AUTHENTICATION_MONGODB_COLLECTION:-users}"
+      - --http-host
+      - "0.0.0.0"
+      - --http-port
+      - "8080"
+      - --allowed-origins
+      - "${AUTHENTICATION_ALLOWED_ORIGINS:-*;}"
+    ports:
+      - "${HOSTNAME:-127.0.0.1}:${AUTHENTICATION_SERVICE_PORT:-8081}:8080"
+    restart: always
+
+  statistics-service:
+    image: "jahrim/io.github.jahrim.chess.statistics-service:${STATISTICS_SERVICE_VERSION:-latest}"
+    command:
+      - --mongodb-connection
+      - "${STATISTICS_MONGODB_CONNECTION:?the statistics service won't be able to connect to MongoDB}"
+      - --mongodb-database
+      - "${STATISTICS_MONGODB_DATABASE:-statistics}"
+      - --mongodb-collection
+      - "${STATISTICS_MONGODB_COLLECTION:-scores}"
+      - --http-host
+      - "0.0.0.0"
+      - --http-port
+      - "8080"
+      - --allowed-origins
+      - "${STATISTICS_ALLOWED_ORIGINS:-*;}"
+    ports:
+      - "${HOSTNAME:-127.0.0.1}:${STATISTICS_SERVICE_PORT:-8082}:8080"
+    restart: always
+
+  chess-game-service:
+    depends_on:
+      - statistics-service
+    image: "jahrim/io.github.jahrim.chess.chess-game-service:${CHESS_GAME_SERVICE_VERSION:-latest}"
+    command:
+      - --statistics-service
+      - "${HOSTNAME:-127.0.0.1}:${STATISTICS_SERVICE_PORT:-8082}"
+      - --http-host
+      - "0.0.0.0"
+      - --http-port
+      - "8080"
+      - --allowed-origins
+      - "${CHESS_GAME_SERVICE_ALLOWED_ORIGINS:-*;}"
+    ports:
+      - "${HOSTNAME:-127.0.0.1}:${CHESS_GAME_SERVICE_PORT:-8083}:8080"
+    restart: always
+
+  frontend:
+    depends_on:
+      - authentication-service
+      - statistics-service
+      - chess-game-service
+    image: "jahrim/io.github.jahrim.chess.frontend:${FRONTEND_VERSION:-latest}"
+    ports:
+      - "${HOSTNAME:-127.0.0.1}:${FRONTEND_SERVICE_PORT:-8080}:8080"
+    restart: always
+    environment:
+      VITE_RUNTIME_ENVIRONMENT: >
+        {
+          "AUTHENTICATION_SERVICE": "${HOSTNAME:-127.0.0.1}:${AUTHENTICATION_SERVICE_PORT:-8081}",
+          "STATISTICS_SERVICE": "${HOSTNAME:-127.0.0.1}:${STATISTICS_SERVICE_PORT:-8082}",
+          "CHESS_GAME_SERVICE": "${HOSTNAME:-127.0.0.1}:${CHESS_GAME_SERVICE_PORT:-8083}"
+        }
+```
+
+Come si può notare, il _docker compose_ file, inizializza i servizi del sistema a partire dalle loro
+immagini, reperite in locale se disponibili, altrimenti su [DockerHub](https://hub.docker.com/).
+
+Ogni servizio è stato configurato adeguatamente attraverso degli argomenti a linea di comando oppure
+delle variabili d'ambiente. Tale configurazione può essere modificata definendo delle variabili d'ambiente
+all'interno della propria console, oppure più opportunamente definendo un file _.env_ che le contiene.
+
+### Configurazione
+
+Di seguito, si riporta un esempio di file _.env_, che illustra le variabili d'ambiente che possono essere
+specificate per configurare l'esecuzione del sistema.
+
+```properties
+### System
+# The name of the system (used to name the containers)
+COMPOSE_PROJECT_NAME=system
+# The hostname where the system is deployed
+HOSTNAME=127.0.0.1
+
+### Frontend Service (https://github.com/ldss-project/frontend)
+# The version of the frontend service to use
+FRONTEND_VERSION=latest
+# The port at which the frontend service will be listening
+FRONTEND_PORT=8080
+
+### Authentication Service (https://github.com/ldss-project/authentication-service)
+# The version of the authentication service to use
+AUTHENTICATION_SERVICE_VERSION=latest
+# The port at which the authentication service will be listening
+AUTHENTICATION_SERVICE_PORT=8081
+# The connection to the MongoDB instance where the data of the authentication service will be stored
+AUTHENTICATION_MONGODB_CONNECTION=...
+# The MongoDB database where the data of the authentication service will be stored
+AUTHENTICATION_MONGODB_DATABASE=authentication
+# The collection inside the MongoDB database where the data of the authentication service will be stored
+AUTHENTICATION_MONGODB_COLLECTION=users
+# The origins that are allowed to interact with the authentication service
+AUTHENTICATION_ALLOWED_ORIGINS=http://localhost:8080;http://127.0.0.1:8080;http://localhost:5173;http://127.0.0.1:5173;
+
+### Statistics Service (https://github.com/ldss-project/statistics-service)
+# The version of the statistics service to use
+STATISTICS_SERVICE_VERSION=latest
+# The port at which the statistics service will be listening
+STATISTICS_SERVICE_PORT=8082
+# The connection to the MongoDB instance where the data of the statistics service will be stored
+STATISTICS_MONGODB_CONNECTION=...
+# The MongoDB database where the data of the statistics service will be stored
+STATISTICS_MONGODB_DATABASE=statistics
+# The collection inside the MongoDB database where the data of the statistics service will be stored
+STATISTICS_MONGODB_COLLECTION=scores
+# The origins that are allowed to interact with the statistics service
+STATISTICS_ALLOWED_ORIGINS=http://localhost:8080;http://127.0.0.1:8080;http://localhost:5173;http://127.0.0.1:5173;
+
+### Chess Game Service (https://github.com/ldss-project/chess-game-service)
+# The version of the chess game service to use
+CHESS_GAME_SERVICE_VERSION=latest
+# The port at which the chess game service will be listening
+CHESS_GAME_SERVICE_PORT=8083
+# The origins that are allowed to interact with the chess game service
+CHESS_GAME_SERVICE_ALLOWED_ORIGINS=http://localhost:8080;http://127.0.0.1:8080;http://localhost:5173;http://127.0.0.1:5173;
+```
+
+Tutte queste configurazioni sono opzionali da specificare, ad eccezione delle stringhe di connessione ai database
+[MongoDB](https://www.mongodb.com/) da cui alcuni servizi dipendono. Infatti, queste stringhe contengono alcuni
+dati sensibili, come le credenziali per autenticarsi ai database, quindi non sono state rese pubbliche.
+Inoltre, potrebbe essere necessario modificare la configurazione relativa alla _CORS Policy_, in base al browser
+utilizzato.
+
+### Esecuzione
+
+In sintesi, supponendo di aver installato [Docker](https://www.docker.com/) nella propria macchina,
+esistono due modalità per eseguire il sistema:
+- **Via release**:
+  1. Scaricare i file `docker-compose.yml` e `default.env` disponibili al seguente 
+     [link](https://github.com/ldss-project/frontend/releases);
+  2. Mettere i file nella stessa directory;
+  3. Modificare il file `default.env`, configurando l'esecuzione del sistema a piacere ed
+     includendo i segreti necessari alla sua esecuzione;
+  4. Rinominare il file `default.env` a `.env`;
+  5. Eseguire `docker compose up` all'interno della directory in cui si trovano i due file.
+- **Via repository**:
+  1. Clonare il [frontend](https://github.com/ldss-project/frontend), in cui sono presenti i
+     file `docker-compose.yml` e `.env.public`;
+  2. Creare un file `.env` nella root del progetto, configurando l'esecuzione del sistema a piacere ed
+     includendo i segreti necessari alla sua esecuzione. Il file `.env.public` può essere utilizzato
+     come template per create il file `.env`;
+  3. Eseguire `docker compose up` o `npm run deploy` all'interno della root del progetto.
+
 ## Licensing
 
----
+Il software realizzato per questo progetto è soggetto alla licenza [MIT](https://opensource.org/license/mit/),
+per cui è sia _libero_, garantendo la possibilità di utilizzare, modificare e ridistribuire il software, che
+_open-source_, garantendo l'accesso al codice sorgente del progetto.
+
+La compatibilità della licenza utilizzata rispetto alle licenze dei software da cui questo progetto dipende, è
+stata verificata tramite [Fossa](https://fossa.com/), che è uno strumento che monitora le licenze applicate a
+delle _repository_ GitHub, verificando che siano compatibili con quelle delle dipendenze esplicitate dal _repository_.
 
 [Back to Top](#top) |
 [Previous Chapter](/docs/3-tactical-design)

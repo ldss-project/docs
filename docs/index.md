@@ -8,8 +8,10 @@ nav_order: 1
 {: .no_toc}
 
 ## Autori
-- Cesario Jahrim Gabriele
-- Kentpayeva Madina
+- Cesario Jahrim Gabriele: \
+  jahrim.cesario2@studio.unibo.it
+- Kentpayeva Madina: \
+  madina.kentpayeva@studio.unibo.it
 
 ---
 
