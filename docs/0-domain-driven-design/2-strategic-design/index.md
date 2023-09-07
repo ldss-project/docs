@@ -1,7 +1,8 @@
 ---
 title: Strategic Design
 layout: default
-nav_order: 4
+parent: Domain Driven Design
+nav_order: 3
 ---
 
 # Strategic Design
@@ -129,5 +130,5 @@ il **Legacy Chess Engine**, per cui il primo assume il ruolo di interfaccia vers
 ---
 
 [Back to Top](#top) |
-[Previous Chapter](/docs/1-domain-analysis) |
-[Next Chapter](/docs/3-tactical-design)
+[Previous Chapter](/docs/0-domain-driven-design/1-domain-analysis) |
+[Next Chapter](/docs/0-domain-driven-design/3-tactical-design)

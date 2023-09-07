@@ -1,7 +1,8 @@
 ---
 title: Tactical Design
 layout: default
-nav_order: 5
+parent: Domain Driven Design
+nav_order: 4
 ---
 
 # Tactical Design
@@ -403,5 +404,5 @@ pagine web:
 ---
 
 [Back to Top](#top) |
-[Previous Chapter](/docs/2-strategic-design) |
-[Next Chapter](/docs/4-devops)
+[Previous Chapter](/docs/0-domain-driven-design/2-strategic-design) |
+[To DevOps](/docs/1-devops)

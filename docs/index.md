@@ -34,4 +34,4 @@ si rimanda ai corrispondenti repository:
 ---
 
 [Back to Top](#top) |
-[Next Chapter](/docs/0-problem)
+[Next Chapter](/docs/0-domain-driven-design/0-problem)

@@ -1,7 +1,8 @@
 ---
 title: Presentazione del problema
 layout: default
-nav_order: 2
+parent: Domain Driven Design
+nav_order: 1
 ---
 
 # Presentazione del problema
@@ -53,5 +54,4 @@ practice di DevOps e Continuous Integration.
 ---
 
 [Back to Top](#top) |
-[Previous Chapter](/docs) |
-[Next Chapter](/docs/1-domain-analysis)
+[Next Chapter](/docs/0-domain-driven-design/1-domain-analysis)

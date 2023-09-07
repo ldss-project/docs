@@ -1,7 +1,8 @@
 ---
 title: Domain Analysis
 layout: default
-nav_order: 3
+parent: Domain Driven Design
+nav_order: 2
 ---
 
 # Domain Analysis
@@ -28,7 +29,7 @@ nel team durante le fasi successive del progetto.
 ## Domain Storytelling
 
 Come primo processo della _Domain Analysis_, si è deciso di approfondire i
-processi delineati dai [requisiti di massima](/docs/0-problem#requisiti-di-massima)
+processi delineati dai [requisiti di massima](/docs/0-domain-driven-design/0-problem#requisiti-di-massima)
 attraverso la tecnica del _Domain Storytelling_.
 
 In mancanza di un committente e quindi di un _Domain Expert_ da poter coinvolgere
@@ -395,5 +396,5 @@ equivoci, facilitando la comunicazione tra i membri del team.
 ---
 
 [Back to Top](#top) |
-[Previous Chapter](/docs/0-problem) |
-[Next Chapter](/docs/2-strategic-design)
+[Previous Chapter](/docs/0-domain-driven-design/0-problem) |
+[Next Chapter](/docs/0-domain-driven-design/2-strategic-design)
