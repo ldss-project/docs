@@ -7,7 +7,3 @@ has_children: true
 
 # Domain Driven Design
 {: .no_toc}
-
----
-
-[Back to Top](#top)

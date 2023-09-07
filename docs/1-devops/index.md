@@ -7,7 +7,3 @@ has_children: true
 
 # DevOps
 {: .no_toc}
-
----
-
-[Back to Top](#top)
