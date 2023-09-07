@@ -78,6 +78,9 @@ e, in generale, prevede i seguenti branch:
   moduli, come ad esempio il **Frontend** (logica, pagine, componenti grafici...). Nasce dal **master** e
   ritorna sul **master**.
 
+In generale, si è deciso di adottare quando opportuno una strategia di _merge_ basata sul _rebase_, allo scopo di
+mantenere la storia dei commit il più lineare possibile e quindi più facilmente interpretabile sia per gli umani che per le macchine.
+
 All'interno di un branch, i commit aderiscono allo standard [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/)
 in modo da supportare il versionamento automatico del software. I principali tipi di commit utilizzati sono i seguenti:
 - **feat**: indica che il commit ha aggiunto una nuova funzionalità al software visibile ai suoi utilizzatori.
