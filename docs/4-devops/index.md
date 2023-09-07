@@ -2,6 +2,7 @@
 title: DevOps
 layout: default
 nav_order: 6
+render_with_liquid: false
 ---
 
 # DevOps
