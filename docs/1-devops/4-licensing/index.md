@@ -14,7 +14,7 @@ In questo capitolo si descriverà la licenza software adottata per la pubblicazi
 {: .no_toc}
 
 - TOC
-  {:toc}
+{:toc}
 
 ---
 
