@@ -284,7 +284,11 @@ gitSemVer {
 tasks.jar {
     dependsOn(configurations.runtimeClasspath)
     from(sourceSets.main.get().output)
-    from(configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) })
+    from(
+      configurations.runtimeClasspath.get()
+        .filter { it.name.endsWith("jar") }
+        .map { zipTree(it) }
+    )
 
     manifest.attributes["Main-Class"] = projectInfo.implementationClass
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -551,7 +555,7 @@ Siccome il _workflow_ esegue solamente quando una pull request viene aggiornata,
 _branch protection_ sul **master** che permettesse modifiche sul branch solo quando provenienti da una pull
 request (impedendo una push diretta).
 In questo modo, fin quando la _branch protection_ è rispettata dagli sviluppatori, si è sicuri che il codice sul
-**master** sia propriamente testato.
+**master** è stato propriamente testato.
 
 Un _workflow_ molto simile è stato realizzato anche per il **Frontend Service**, con l'unica differenza che si
 basa su [npm](https://www.npmjs.com/) + [Vitest](https://vitest.dev/) invece che su [Gradle](https://gradle.org/) +
@@ -630,7 +634,7 @@ Come si può notare, il _workflow_ prevede un unico _job_:
      generare e pubblicare gli artefatti del modulo.
 
   In questo _job_, sono specificati come variabili d'ambiente tutti i segreti necessari per autenticarsi
-  ai diversi repository su cui saranno pubblicati gli artefatti del modulo.
+  ai diversi portali su cui saranno pubblicati gli artefatti del modulo.
 
 Di seguito, si riporta uno script di [Semantic Release](https://github.com/semantic-release/semantic-release)
 che sintetizza gli script utilizzati per generare e pubblicare gli artefatti di ciascun modulo. Infatti, ogni
@@ -688,7 +692,7 @@ sopra riportato sono i seguenti:
 - [@semantic-release/commit-analyzer](https://github.com/semantic-release/commit-analyzer): analizza la storia
   dei commit, eventualmente determinando la nuova versione del software da rilasciare;
 - [@semantic-release/release-notes-generator](https://github.com/semantic-release/release-notes-generator):
-  genera una lista dei cambiamenti che ha subito il software dall'ultima versione sulla base della sua storia
+  genera una lista dei cambiamenti che ha subito il software dall'ultima versione, sulla base della sua storia
   dei commit;
 - [@semantic-release/changelog](https://github.com/semantic-release/changelog): genera un file che contiene
   la lista dei cambiamenti che ha subito il software dall'ultima versione;
@@ -804,11 +808,11 @@ services:
 Come si può notare, il _docker compose_ file, inizializza i servizi del sistema a partire dalle loro
 immagini, reperite in locale se disponibili, altrimenti su [DockerHub](https://hub.docker.com/).
 
-Ogni servizio è stato configurato adeguatamente attraverso degli argomenti a linea di comando oppure
+### Configurazione
+
+Ogni servizio del sistema è stato configurato adeguatamente attraverso degli argomenti a linea di comando oppure
 delle variabili d'ambiente. Tale configurazione può essere modificata definendo delle variabili d'ambiente
 all'interno della propria console, oppure più opportunamente definendo un file _.env_ che le contiene.
-
-### Configurazione
 
 Di seguito, si riporta un esempio di file _.env_, che illustra le variabili d'ambiente che possono essere
 specificate per configurare l'esecuzione del sistema.
@@ -831,28 +835,32 @@ FRONTEND_PORT=8080
 AUTHENTICATION_SERVICE_VERSION=latest
 # The port at which the authentication service will be listening
 AUTHENTICATION_SERVICE_PORT=8081
-# The connection to the MongoDB instance where the data of the authentication service will be stored
+# The connection to the MongoDB instance where the data of the authentication
+# service will be stored
 AUTHENTICATION_MONGODB_CONNECTION=...
 # The MongoDB database where the data of the authentication service will be stored
 AUTHENTICATION_MONGODB_DATABASE=authentication
-# The collection inside the MongoDB database where the data of the authentication service will be stored
+# The collection inside the MongoDB database where the data of the authentication
+# service will be stored
 AUTHENTICATION_MONGODB_COLLECTION=users
 # The origins that are allowed to interact with the authentication service
-AUTHENTICATION_ALLOWED_ORIGINS=http://localhost:8080;http://127.0.0.1:8080;http://localhost:5173;http://127.0.0.1:5173;
+AUTHENTICATION_ALLOWED_ORIGINS=http://localhost:8080;http://127.0.0.1:8080;
 
 ### Statistics Service (https://github.com/ldss-project/statistics-service)
 # The version of the statistics service to use
 STATISTICS_SERVICE_VERSION=latest
 # The port at which the statistics service will be listening
 STATISTICS_SERVICE_PORT=8082
-# The connection to the MongoDB instance where the data of the statistics service will be stored
+# The connection to the MongoDB instance where the data of the statistics service
+# will be stored
 STATISTICS_MONGODB_CONNECTION=...
 # The MongoDB database where the data of the statistics service will be stored
 STATISTICS_MONGODB_DATABASE=statistics
-# The collection inside the MongoDB database where the data of the statistics service will be stored
+# The collection inside the MongoDB database where the data of the statistics
+# service will be stored
 STATISTICS_MONGODB_COLLECTION=scores
 # The origins that are allowed to interact with the statistics service
-STATISTICS_ALLOWED_ORIGINS=http://localhost:8080;http://127.0.0.1:8080;http://localhost:5173;http://127.0.0.1:5173;
+STATISTICS_ALLOWED_ORIGINS=http://localhost:8080;http://127.0.0.1:8080;
 
 ### Chess Game Service (https://github.com/ldss-project/chess-game-service)
 # The version of the chess game service to use
@@ -860,7 +868,7 @@ CHESS_GAME_SERVICE_VERSION=latest
 # The port at which the chess game service will be listening
 CHESS_GAME_SERVICE_PORT=8083
 # The origins that are allowed to interact with the chess game service
-CHESS_GAME_SERVICE_ALLOWED_ORIGINS=http://localhost:8080;http://127.0.0.1:8080;http://localhost:5173;http://127.0.0.1:5173;
+CHESS_GAME_SERVICE_ALLOWED_ORIGINS=http://localhost:8080;http://127.0.0.1:8080;
 ```
 
 Tutte queste configurazioni sono opzionali da specificare, ad eccezione delle stringhe di connessione ai database
