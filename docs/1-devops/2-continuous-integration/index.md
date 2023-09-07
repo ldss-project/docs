@@ -199,6 +199,9 @@ Come si può notare, il _workflow_ prevede un unico _job_:
   In questo _job_, sono specificati come variabili d'ambiente tutti i segreti necessari per autenticarsi
   ai diversi portali su cui saranno pubblicati gli artefatti del modulo.
 
+Il _workflow_ viene eseguito ad ogni push sul branch **master**, pertanto ogni push sul branch potrebbe
+rilasciare una nuova versione del modulo, in base alla storia dei commit a partire dalla sua ultima versione.
+
 Di seguito, si riporta uno script di [Semantic Release](https://github.com/semantic-release/semantic-release)
 che sintetizza gli script utilizzati per generare e pubblicare gli artefatti di ciascun modulo. Infatti, ogni
 modulo ha necessità di pubblicare gli artefatti su dei portali specifici e la soluzione per pubblicare su
