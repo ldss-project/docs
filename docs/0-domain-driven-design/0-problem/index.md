@@ -29,7 +29,7 @@ già implementato per il corso di
 (reperibile al seguente [link](https://github.com/jahrim/PPS-22-chess)),
 che sarà modificato opportunamente e a cui saranno aggiunte nuove funzionalità.
 
-In particolare, ora l'engine permette di gestire un'unica partita di scacchi
+In particolare, l'engine permette di gestire un'unica partita di scacchi
 tra due giocatori in locale, fornendo la possibilità di configurare la partita
 (es.: modalità di gioco a tempo...). Questa applicazione dovrà invece permettere
 di gestire più partite tra diversi giocatori online.

@@ -22,14 +22,14 @@ Questa è la documentazione relativa al progetto per il corso di
 
 Per la documentazione specifica degli servizi e degli artefatti realizzati,
 si rimanda ai corrispondenti repository:
-- [Swagger APIs](https://github.com/ldss-project/swagger-apis)
-- [Frontend Service](https://github.com/ldss-project/frontend)
-- [Authentication Service](https://github.com/ldss-project/authentication-service)
-- [Statistics Service](https://github.com/ldss-project/statistics-service)
-- [Chess Game Service](https://github.com/ldss-project/chess-game-service)
-- [HexArc - Hexagonal Architecture Framework](https://github.com/ldss-project/hexarc)
-- [WartRemover Gradle Plugin](https://github.com/ldss-project/wartremover-gradle-plugin)
-- [Scala3 Project Template Repository](https://github.com/ldss-project/scala3-project-template)
+- [swagger-apis](https://github.com/ldss-project/swagger-apis)
+- [frontend](https://github.com/ldss-project/frontend)
+- [authentication-service](https://github.com/ldss-project/authentication-service)
+- [statistics-service](https://github.com/ldss-project/statistics-service)
+- [chess-game-service](https://github.com/ldss-project/chess-game-service)
+- [hexarc](https://github.com/ldss-project/hexarc)
+- [wartremover-gradle-plugin](https://github.com/ldss-project/wartremover-gradle-plugin)
+- [scala3-project-template](https://github.com/ldss-project/scala3-project-template)
 
 ---
 
