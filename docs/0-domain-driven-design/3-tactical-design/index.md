@@ -37,20 +37,20 @@ permettendone il riutilizzo in altri contesti di sviluppo in futuro.
 ### Architettura a microservizi
 
 I microservizi di cui si compone l'architettura del sistema sono i seguenti:
-- **Frontend Service**: modella il **Frontend Bounded Context**;
+- **Frontend Service**: modella il **Frontend BC**;
   si occupa di esporre e presentare le funzionalità del sistema agli utenti umani
   dell'applicazione.
-- **Authentication Service**: modella l'**Authentication Bounded Context**;
+- **Authentication Service**: modella l'**Authentication BC**;
   si occupa della gestione della registrazione e dell'autenticazione degli utenti nel
   sistema.
   La persistenza dei dati degli utenti del servizio è delegata a un
   **Authentication Database**.
-- **Statistics Service**: modella lo **Statistics Bounded Context**;
+- **Statistics Service**: modella lo **Statistics BC**;
   si occupa della gestione dei punteggi degli utenti nel sistema.
   La persistenza dei punteggi degli utenti del servizio è delegata a uno
   **Statistics Database**.
-- **Chess Game Service**: modella il **Game Manager Bounded Context** e il
-  **Game Executor Bounded Context**; si occupa della gestione della creazione,
+- **Chess Game Service**: modella il **Game Manager BC** e il
+  **Game Executor BC**; si occupa della gestione della creazione,
   rimozione e ricerca delle partite di scacchi nel sistema, oltre che della
   connessione dei giocatori a tali partite e del loro svolgimento.
 
@@ -63,7 +63,7 @@ consiste nell'insieme delle partite di scacchi e dello stato in cui si trovano.
 ### Clean Architecture
 
 Per la progettazione dei microservizi del sistema, si è deciso di adottare le
-buone pratiche della _Clean Architecture_, anche detta _Hexagonal Architecture_.
+buone pratiche della _Clean Architecture_, detta anche _Hexagonal Architecture_.
 
 In dettaglio, ogni servizio è stato scomposto in quattro strati concentrici:
 - **Modelli**: lo strato più interno al sistema. Un modello contiene la business
@@ -122,13 +122,13 @@ ovvero la rappresentazione di un utente guest e di un utente autenticato nel sis
 questa struttura, altri servizi potranno definire delle query da richiedere al database.
 
 Un utente nel sistema può essere modellato come un'_entità_ descritta dai seguenti attributi:
-- _Username_: un _value object_ che modella il nome dell'utente, usato come un identificatore
+- **Username**: un _value object_ che modella il nome dell'utente, usato come un identificatore
   human-friendly all'interno del sistema;
-- _Password_: un _value object_ che modella la password dell'utente, utilizzata per permettere
+- **Password**: un _value object_ che modella la password dell'utente, utilizzata per permettere
   all'utente di autenticarsi all'applicazione;
-- _Email_: un _value object_ che modella l'email dell'utente, utilizzata come un esempio di dato
+- **Email**: un _value object_ che modella l'email dell'utente, utilizzata come un esempio di dato
   che potrebbe appartenere al profilo di un utente;
-- _Token_: un'_entità_ che modella il token dell'utente. Se presente, indica che l'utente è
+- **Token**: un'_entità_ che modella il token dell'utente. Se presente, indica che l'utente è
   autenticato all'applicazione.
 
 Di seguito, si riporta lo schema relativo a un utente nel database.
@@ -229,9 +229,9 @@ questa struttura, altri servizi potranno definire delle query da richiedere al d
 
 Le statistiche di un giocatore possono essere modellate come un'_entità_ descritta dai seguenti
 attributi:
-- _Username_: un _value object_ che modella il nome del giocatore a cui appartengono le statistiche,
+- **Username**: un _value object_ che modella il nome del giocatore a cui appartengono le statistiche,
   usato come un identificatore human-friendly all'interno del sistema;
-- _Latest Scores_: una sequenza di _value object_ che modellano i punteggi che il giocatore ha ottenuto
+- **Latest Scores**: una sequenza di _value object_ che modellano i punteggi che il giocatore ha ottenuto
   nel sistema, nell'ordine in cui sono stati ottenuti.
 
 Di seguito, si riporta lo schema relativo alle statistiche di un giocatore nel database.
@@ -363,7 +363,7 @@ Per quanto riguarda la **Game Execution API**, il contratto espone le seguenti f
 - **Get State**: permette a un giocatore di ottenere lo stato del server che esegue la partita
   di scacchi, incluso lo stato della partita stessa.
 - **Join Game**: permette a un giocatore di partecipare alla partita, specificando il proprio
-  nome e la squadra a cui si vuole essere assegnati.
+  nome e la squadra vuole essere assegnato.
 - **Find Moves**: permette a un giocatore di ottenere le mosse disponibili per un pezzo in una
   specifica posizione sulla scacchiera.
 - **Apply Move**: permette a un giocatore di applicare una mossa a un pezzo sulla scacchiera.

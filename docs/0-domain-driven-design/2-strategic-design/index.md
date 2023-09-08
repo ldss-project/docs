@@ -120,9 +120,9 @@ in modo da minimizzare i danni al consumatore nel caso in cui l'interfaccia dei 
 Infatti, per i domini core si prevede un'evoluzione continua e quindi un'interfaccia molto dinamica.
 
 Tale _Anti-Corruption Layer_ non è stato adottato invece per i _bounded context_ appartenenti allo stesso
-dominio, per i quali si è deciso di risparmiare delle risorse in termini di tempo, considerando che il loro
-sviluppo potrebbe essere assegnato allo stesso membro del team, in modo da ridurre la complessità della
-coordinazione tra gli eventuali collaboratori dovuta a relazioni di tipo supplier-consumer conformiste.
+dominio, per i quali si è deciso di risparmiare delle risorse in termini di tempo. Infatti, si è considerato
+che il loro sviluppo potrebbe essere assegnato allo stesso membro del team, in modo da ridurre la complessità
+della coordinazione tra gli eventuali collaboratori, dovuta a relazioni di tipo supplier-consumer conformiste.
 
 Infine, nella _context map_ è stata esplicitata anche la relazione tra il **Game Executor BC** e
 il **Legacy Chess Engine**, per cui il primo assume il ruolo di interfaccia verso i componenti del secondo.

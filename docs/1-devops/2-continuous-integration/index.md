@@ -3,6 +3,7 @@ title: Continuous Integration
 layout: default
 parent: DevOps
 nav_order: 3
+render_with_liquid: false
 ---
 
 # Continuous Integration
@@ -10,7 +11,7 @@ nav_order: 3
 
 In questo capitolo si approfondiranno le tecniche utilizzate per integrare
 lo sviluppo dei moduli del sistema con i processi automatici di testing e di
-pubblicazione in parte definiti nella _build automation_, in modo che ad ogni
+pubblicazione, in parte definiti nella _build automation_, in modo che ad ogni
 incremento di un modulo venga eseguita prima la sua verifica e poi la sua
 pubblicazione.
 
@@ -32,9 +33,9 @@ Come strumento principale per la configurazione della _continuous integration_ d
 è stato utilizzato [GitHub Actions](https://github.com/features/actions), siccome è già integrato nelle
 _repository_ di GitHub.
 
-> _**NOTA**_: siccome ogni modulo del sistema può avere dei requisiti diversi per quanto riguarda la
-> _continuous integration_, per semplicità, di seguito si riporterà solo l'approccio più comunemente
-> utilizzato.
+> _**NOTA**_: dal momento che ogni modulo del sistema può avere dei requisiti diversi per quanto
+> riguarda la _continuous integration_, per semplicità, di seguito si riporterà solo l'approccio
+> più comunemente utilizzato.
 
 ## Continuous Testing
 

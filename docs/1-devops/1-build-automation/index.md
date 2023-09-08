@@ -145,7 +145,7 @@ appoggio:
 Per la generazione degli artefatti di ogni modulo, sono state predisposte tre task principali:
 - **sourcesJar**: produce il jar contenente i sorgenti del modulo.
 - **javadocJar**: produce il jar contenente la documentazione del modulo.
-- **jar**: produce il jar eseguibile di un modulo che può essere eseguito.
+- **jar**: produce il jar eseguibile di un modulo, nel caso di moduli che possono essere eseguiti.
 
 Di seguito, si riporta la configurazione relativa a tali task.
 
