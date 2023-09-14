@@ -186,15 +186,16 @@ esistono due modalità per eseguire il sistema:
   3. Modificare il file `default.env`, configurando l'esecuzione del sistema in base alle
      proprie esigenze ed includendo i segreti necessari alla sua esecuzione;
   4. Rinominare il file `default.env` a `.env`;
-  5. Eseguire `docker compose up` all'interno della directory in cui si trovano i due file.
+  5. Eseguire `docker compose up` all'interno della directory in cui si trovano i due file;
+  6. Connettersi al `frontend` (default: http://127.0.0.1:8080).
 - **Via repository**:
   1. Clonare il [frontend](https://github.com/ldss-project/frontend), in cui sono presenti i
      file `docker-compose.yml` e `.env.public`;
   2. Creare un file `.env` nella root del progetto, configurando l'esecuzione del sistema in base alle
      proprie esigenze ed includendo i segreti necessari alla sua esecuzione. Il file `.env.public` può
      essere utilizzato come template per creare il file `.env`;
-  3. Eseguire `docker compose up` o `npm run deploy` all'interno della root del progetto.
-
+  3. Eseguire `docker compose up` o `npm run deploy` all'interno della root del progetto;
+  4. Connettersi al `frontend` (default: http://127.0.0.1:8080).
 ---
 
 [Back to Top](#top) |
