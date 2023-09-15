@@ -20,7 +20,7 @@ nav_order: 1
 Questa è la documentazione relativa al progetto per il corso di
 [Laboratorio di Sistemi Software 2022-2023](https://www.unibo.it/it/didattica/insegnamenti/insegnamento/2022/412677).
 
-Per la documentazione specifica degli servizi e degli artefatti realizzati,
+Per la documentazione specifica dei servizi e degli artefatti realizzati,
 si rimanda ai corrispondenti repository:
 - [swagger-apis](https://github.com/ldss-project/swagger-apis)
 - [frontend](https://github.com/ldss-project/frontend)

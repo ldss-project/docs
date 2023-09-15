@@ -363,7 +363,7 @@ Per quanto riguarda la **Game Execution API**, il contratto espone le seguenti f
 - **Get State**: permette a un giocatore di ottenere lo stato del server che esegue la partita
   di scacchi, incluso lo stato della partita stessa.
 - **Join Game**: permette a un giocatore di partecipare alla partita, specificando il proprio
-  nome e la squadra vuole essere assegnato.
+  nome e la squadra a cui vuole essere assegnato.
 - **Find Moves**: permette a un giocatore di ottenere le mosse disponibili per un pezzo in una
   specifica posizione sulla scacchiera.
 - **Apply Move**: permette a un giocatore di applicare una mossa a un pezzo sulla scacchiera.
