@@ -196,6 +196,7 @@ esistono due modalità per eseguire il sistema:
      essere utilizzato come template per creare il file `.env`;
   3. Eseguire `docker compose up` o `npm run deploy` all'interno della root del progetto;
   4. Connettersi al `frontend` (default: http://127.0.0.1:8080).
+
 ---
 
 [Back to Top](#top) |
