@@ -26,8 +26,9 @@ _open-source_, garantendo l'accesso al codice sorgente del progetto.
 
 La licenza necessita di includere un header che descriva l'attribuzione del software in una buona porzione
 del software realizzato. Per includere tale header nei sorgenti prodotti in questo progetto, si è fatto
-affidamento a [spotless](https://github.com/diffplug/spotless), per generare gli header in seguito al
-controllo della qualità del codice effettuato durante il processo di _build automation_.
+affidamento a [spotless](https://github.com/diffplug/spotless) e a [licensesnip](https://lib.rs/crates/licensesnip),
+per generare gli header in seguito al controllo della qualità del codice effettuato durante il processo di
+_build automation_.
 
 La compatibilità della licenza utilizzata rispetto alle licenze dei software da cui questo progetto dipende, è
 stata verificata tramite [Fossa](https://fossa.com/), che è uno strumento che monitora le licenze applicate a
