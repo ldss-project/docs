@@ -74,7 +74,7 @@ services:
     image: "jahrim/io.github.jahrim.chess.chess-game-service:${CHESS_GAME_SERVICE_VERSION:-latest}"
     command:
       - --statistics-service
-      - "${HOSTNAME:-127.0.0.1}:${STATISTICS_SERVICE_PORT:-8082}"
+      - "statistics-service:8080"
       - --http-host
       - "0.0.0.0"
       - --http-port
