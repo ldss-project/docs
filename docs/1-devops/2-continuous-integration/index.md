@@ -123,7 +123,7 @@ In questo modo, fin quando la _branch protection_ è rispettata dagli sviluppato
 
 Un _workflow_ molto simile è stato realizzato anche per il **Frontend Service**, con l'unica differenza che si
 basa su [npm](https://www.npmjs.com/) + [Vitest](https://vitest.dev/) invece che su [Gradle](https://gradle.org/) +
-[JUnit](https://junit.org/junit5/).
+[Scalatest](https://www.scalatest.org/).
 
 ## Continuous Delivery
 
